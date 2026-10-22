@@ -17,12 +17,12 @@ await writeFile('openapi.json', JSON.stringify(createOpenApi((await loadCatalog(
 // Package only runtime files; browser, credentials, observations and node_modules stay out.
 const target = 'artifacts/plugin/web2api';
 await mkdir(target, { recursive: true });
-for (const file of ['plugin.json', 'mcp.json', 'README.md', 'HACKATHON.md', 'SDD.md', 'AUTHENTICATION.md', 'MULTISITE_REPORT.md', 'SOCIAL_REPORT.md', 'openapi.json', 'skills', 'src', 'dist', 'evidence', 'recipes', 'assets', 'web', 'examples']) await cp(file, `${target}/${file}`, { recursive: true });
+for (const file of ['plugin.json', 'mcp.json', 'README.md', 'SDD.md', 'AUTHENTICATION.md', 'MULTISITE_REPORT.md', 'SOCIAL_REPORT.md', 'openapi.json', 'skills', 'src', 'dist', 'evidence', 'recipes', 'assets', 'web', 'examples']) await cp(file, `${target}/${file}`, { recursive: true });
 await writeFile(`${target}/THIRD_PARTY_NOTICES.txt`, `Bundled dependencies: see the license comments in dist/mcp.mjs.\nMCP TypeScript SDK: MIT. Zod: MIT. Build-only esbuild: MIT. Discovery-only Playwright: Apache-2.0.\n\n${await readFile('node_modules/@modelcontextprotocol/sdk/LICENSE', 'utf8')}\n\n${await readFile('node_modules/zod/LICENSE', 'utf8')}`);
 console.log('Built HTTP-only MCP bundle, OpenAPI and artifacts/plugin/web2api (no runtime npm install required).');
 const appTarget = 'artifacts/web2api-app';
 await mkdir(appTarget, { recursive: true });
-for (const file of ['README.md', 'HACKATHON.md', 'SDD.md', 'AUTHENTICATION.md', 'MULTISITE_REPORT.md', 'SOCIAL_REPORT.md', 'openapi.json', 'src', 'dist', 'evidence', 'recipes', 'assets', 'web', 'examples']) await cp(file, `${appTarget}/${file}`, { recursive: true });
+for (const file of ['README.md', 'SDD.md', 'AUTHENTICATION.md', 'MULTISITE_REPORT.md', 'SOCIAL_REPORT.md', 'openapi.json', 'src', 'dist', 'evidence', 'recipes', 'assets', 'web', 'examples']) await cp(file, `${appTarget}/${file}`, { recursive: true });
 await writeFile(`${appTarget}/package.json`, JSON.stringify({ name: 'web2api-app', version: manifest.version, private: true, type: 'module', engines: { node: '>=24 <25' }, scripts: { start: 'node dist/app.mjs', learn: 'node dist/learn.mjs', 'studio:demo': 'node dist/studio-demo.mjs' } }, null, 2));
 await cp(`${target}/THIRD_PARTY_NOTICES.txt`, `${appTarget}/THIRD_PARTY_NOTICES.txt`);
 for (const name of ['playwright', 'playwright-core']) await cp(`node_modules/${name}`, `${appTarget}/node_modules/${name}`, { recursive: true });
