@@ -1,0 +1,2285 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Web2API workflow application",
+    "version": "0.3.0"
+  },
+  "paths": {
+    "/v1/workflows/search_usgar_rooms": {
+      "post": {
+        "operationId": "search_usgar_rooms",
+        "description": "Consultar habitaciones de USGAR por fechas (1–30 noches) y huéspedes (1–8). API HTTP directa; contrasta inventario con calendario. Tarifas en centavos USD reportadas por el sitio; no crea reserva ni garantiza disponibilidad.",
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "localBrowserSession": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "check_in": {
+                    "type": "string",
+                    "format": "date",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                  },
+                  "check_out": {
+                    "type": "string",
+                    "format": "date",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                  },
+                  "guests": {
+                    "default": 2,
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 8
+                  },
+                  "max_results": {
+                    "default": 20,
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 50
+                  }
+                },
+                "required": [
+                  "check_in",
+                  "check_out",
+                  "guests",
+                  "max_results"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Workflow result with source evidence and explicit limits.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$schema": "https://json-schema.org/draft/2020-12/schema",
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "query": {
+                          "type": "object",
+                          "properties": {
+                            "check_in": {
+                              "type": "string",
+                              "format": "date",
+                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                            },
+                            "check_out": {
+                              "type": "string",
+                              "format": "date",
+                              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                            },
+                            "guests": {
+                              "default": 2,
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 8
+                            },
+                            "max_results": {
+                              "default": 20,
+                              "type": "integer",
+                              "minimum": 1,
+                              "maximum": 50
+                            }
+                          },
+                          "required": [
+                            "check_in",
+                            "check_out",
+                            "guests",
+                            "max_results"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "nights": {
+                          "type": "integer",
+                          "exclusiveMinimum": 0,
+                          "maximum": 9007199254740991
+                        },
+                        "currency": {
+                          "type": "string",
+                          "const": "USD"
+                        },
+                        "rooms": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer",
+                                "minimum": -9007199254740991,
+                                "maximum": 9007199254740991
+                              },
+                              "slug": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "max_guests": {
+                                "type": "integer",
+                                "minimum": -9007199254740991,
+                                "maximum": 9007199254740991
+                              },
+                              "available_quantity_reported": {
+                                "type": "integer",
+                                "minimum": -9007199254740991,
+                                "maximum": 9007199254740991
+                              },
+                              "standard_nightly_cents": {
+                                "type": "integer",
+                                "minimum": -9007199254740991,
+                                "maximum": 9007199254740991
+                              },
+                              "standard_stay_cents": {
+                                "type": "integer",
+                                "minimum": -9007199254740991,
+                                "maximum": 9007199254740991
+                              },
+                              "non_refundable_nightly_cents": {
+                                "type": "integer",
+                                "minimum": -9007199254740991,
+                                "maximum": 9007199254740991
+                              },
+                              "non_refundable_stay_cents": {
+                                "type": "integer",
+                                "minimum": -9007199254740991,
+                                "maximum": 9007199254740991
+                              },
+                              "source_url": {
+                                "type": "string",
+                                "format": "uri"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "slug",
+                              "name",
+                              "max_guests",
+                              "available_quantity_reported",
+                              "standard_nightly_cents",
+                              "standard_stay_cents",
+                              "non_refundable_nightly_cents",
+                              "non_refundable_stay_cents",
+                              "source_url"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "total": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991
+                        },
+                        "truncated": {
+                          "type": "boolean"
+                        },
+                        "availability_confirmed": {
+                          "type": "boolean",
+                          "const": false
+                        },
+                        "price_basis": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "query",
+                        "nights",
+                        "currency",
+                        "rooms",
+                        "total",
+                        "truncated",
+                        "availability_confirmed",
+                        "price_basis"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "evidence": {
+                      "type": "object",
+                      "properties": {
+                        "source_mode": {
+                          "type": "string",
+                          "const": "observed_first_party_http"
+                        },
+                        "scope": {
+                          "type": "string",
+                          "const": "usgar_public_read_only"
+                        },
+                        "evidence_level": {
+                          "type": "string",
+                          "const": "E4"
+                        },
+                        "source_urls": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "format": "uri"
+                          }
+                        },
+                        "observed_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                        },
+                        "verification": {
+                          "type": "string"
+                        },
+                        "transport": {
+                          "type": "string",
+                          "const": "http_only"
+                        },
+                        "cached": {
+                          "type": "boolean"
+                        },
+                        "limits": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "required": [
+                        "source_mode",
+                        "scope",
+                        "evidence_level",
+                        "source_urls",
+                        "observed_at",
+                        "verification",
+                        "transport",
+                        "cached",
+                        "limits"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "evidence"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized or session expired"
+          },
+          "404": {
+            "description": "No match or unknown workflow"
+          },
+          "429": {
+            "description": "Rate limited; no automatic retry"
+          },
+          "502": {
+            "description": "Upstream changed, rejected or inconsistent"
+          }
+        }
+      }
+    },
+    "/v1/workflows/lookup_demoblaze_phone": {
+      "post": {
+        "operationId": "lookup_demoblaze_phone",
+        "description": "Encontrar un teléfono por su nombre exacto en Demoblaze: categoría → selección de ID → ficha; contrasta identidad y precio. Tienda demo; el símbolo $ no acredita una moneda ISO ni una compra.",
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "localBrowserSession": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "product_name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 120
+                  }
+                },
+                "required": [
+                  "product_name"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Workflow result with source evidence and explicit limits.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$schema": "https://json-schema.org/draft/2020-12/schema",
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "cat": {
+                          "type": "string"
+                        },
+                        "desc": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "number"
+                        },
+                        "img": {
+                          "type": "string"
+                        },
+                        "price": {
+                          "type": "number"
+                        },
+                        "title": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "cat",
+                        "desc",
+                        "id",
+                        "img",
+                        "price",
+                        "title"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "evidence": {
+                      "type": "object",
+                      "properties": {
+                        "source_mode": {
+                          "type": "string",
+                          "enum": [
+                            "observed_first_party_http",
+                            "documented_api"
+                          ]
+                        },
+                        "transport": {
+                          "type": "string",
+                          "const": "http_only"
+                        },
+                        "observed_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                        },
+                        "workflow": {
+                          "type": "string"
+                        },
+                        "steps_completed": {
+                          "type": "integer",
+                          "minimum": -9007199254740991,
+                          "maximum": 9007199254740991
+                        },
+                        "calls": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "method": {
+                                "type": "string",
+                                "enum": [
+                                  "GET",
+                                  "POST"
+                                ]
+                              },
+                              "url": {
+                                "type": "string",
+                                "format": "uri"
+                              },
+                              "parameters": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "required": [
+                              "method",
+                              "url",
+                              "parameters"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "verification": {
+                          "type": "array",
+                          "items": {
+                            "oneOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "kind": {
+                                    "type": "string",
+                                    "const": "contains_any"
+                                  },
+                                  "input": {
+                                    "type": "string",
+                                    "pattern": "^[a-zA-Z_][a-zA-Z0-9_]{0,79}$"
+                                  },
+                                  "fields": {
+                                    "minItems": 1,
+                                    "maxItems": 30,
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string",
+                                      "maxLength": 250
+                                    }
+                                  },
+                                  "terminal_collection": {
+                                    "anyOf": [
+                                      {
+                                        "type": "string",
+                                        "maxLength": 250
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "kind",
+                                  "input",
+                                  "fields",
+                                  "terminal_collection"
+                                ],
+                                "additionalProperties": false
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "kind": {
+                                    "type": "string",
+                                    "const": "join"
+                                  },
+                                  "step": {
+                                    "type": "integer",
+                                    "minimum": 0,
+                                    "maximum": 7
+                                  },
+                                  "collection": {
+                                    "type": "string",
+                                    "maxLength": 250
+                                  },
+                                  "terminal_collection": {
+                                    "anyOf": [
+                                      {
+                                        "type": "string",
+                                        "maxLength": 250
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "identity": {
+                                    "type": "string",
+                                    "maxLength": 250
+                                  },
+                                  "fields": {
+                                    "minItems": 2,
+                                    "maxItems": 30,
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string",
+                                      "maxLength": 250
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "kind",
+                                  "step",
+                                  "collection",
+                                  "terminal_collection",
+                                  "identity",
+                                  "fields"
+                                ],
+                                "additionalProperties": false
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "kind": {
+                                    "type": "string",
+                                    "const": "complete_search"
+                                  },
+                                  "step": {
+                                    "type": "integer",
+                                    "minimum": 0,
+                                    "maximum": 7
+                                  },
+                                  "collection": {
+                                    "type": "string",
+                                    "maxLength": 250
+                                  },
+                                  "terminal_collection": {
+                                    "type": "string",
+                                    "maxLength": 250
+                                  },
+                                  "identity": {
+                                    "type": "string",
+                                    "maxLength": 250
+                                  },
+                                  "filters": {
+                                    "minItems": 1,
+                                    "maxItems": 8,
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "input": {
+                                          "type": "string",
+                                          "pattern": "^[a-zA-Z_][a-zA-Z0-9_]{0,79}$"
+                                        },
+                                        "fields": {
+                                          "minItems": 1,
+                                          "maxItems": 30,
+                                          "type": "array",
+                                          "items": {
+                                            "type": "string",
+                                            "maxLength": 250
+                                          }
+                                        }
+                                      },
+                                      "required": [
+                                        "input",
+                                        "fields"
+                                      ],
+                                      "additionalProperties": false
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "kind",
+                                  "step",
+                                  "collection",
+                                  "terminal_collection",
+                                  "identity",
+                                  "filters"
+                                ],
+                                "additionalProperties": false
+                              }
+                            ]
+                          }
+                        },
+                        "discovery": {
+                          "type": "string",
+                          "const": "demonstration_guided_dependency_inference"
+                        },
+                        "autonomous_discovery": {
+                          "type": "boolean",
+                          "const": false
+                        }
+                      },
+                      "required": [
+                        "source_mode",
+                        "transport",
+                        "observed_at",
+                        "workflow",
+                        "steps_completed",
+                        "calls",
+                        "verification",
+                        "discovery",
+                        "autonomous_discovery"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "evidence"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized or session expired"
+          },
+          "404": {
+            "description": "No match or unknown workflow"
+          },
+          "429": {
+            "description": "Rate limited; no automatic retry"
+          },
+          "502": {
+            "description": "Upstream changed, rejected or inconsistent"
+          }
+        }
+      }
+    },
+    "/v1/workflows/search_automation_products": {
+      "post": {
+        "operationId": "search_automation_products",
+        "description": "Buscar ropa en Automation Exercise: catálogo → búsqueda oficial → contraste de IDs, nombres y precios. Verifica coincidencias observadas por nombre/categoría; devuelve el texto Rs. del sitio, sin asumir moneda ISO ni disponibilidad real.",
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "localBrowserSession": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "query": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 120
+                  }
+                },
+                "required": [
+                  "query"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Workflow result with source evidence and explicit limits.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$schema": "https://json-schema.org/draft/2020-12/schema",
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "responseCode": {
+                          "type": "number"
+                        },
+                        "products": {
+                          "maxItems": 250,
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "number"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "price": {
+                                "type": "string"
+                              },
+                              "brand": {
+                                "type": "string"
+                              },
+                              "category": {
+                                "type": "object",
+                                "properties": {
+                                  "usertype": {
+                                    "type": "object",
+                                    "properties": {
+                                      "usertype": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "usertype"
+                                    ],
+                                    "additionalProperties": false
+                                  },
+                                  "category": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "usertype",
+                                  "category"
+                                ],
+                                "additionalProperties": false
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "name",
+                              "price",
+                              "brand",
+                              "category"
+                            ],
+                            "additionalProperties": false
+                          }
+                        }
+                      },
+                      "required": [
+                        "responseCode",
+                        "products"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "evidence": {
+                      "type": "object",
+                      "properties": {
+                        "source_mode": {
+                          "type": "string",
+                          "enum": [
+                            "observed_first_party_http",
+                            "documented_api"
+                          ]
+                        },
+                        "transport": {
+                          "type": "string",
+                          "const": "http_only"
+                        },
+                        "observed_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                        },
+                        "workflow": {
+                          "type": "string"
+                        },
+                        "steps_completed": {
+                          "type": "integer",
+                          "minimum": -9007199254740991,
+                          "maximum": 9007199254740991
+                        },
+                        "calls": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "method": {
+                                "type": "string",
+                                "enum": [
+                                  "GET",
+                                  "POST"
+                                ]
+                              },
+                              "url": {
+                                "type": "string",
+                                "format": "uri"
+                              },
+                              "parameters": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "required": [
+                              "method",
+                              "url",
+                              "parameters"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "verification": {
+                          "type": "array",
+                          "items": {
+                            "oneOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "kind": {
+                                    "type": "string",
+                                    "const": "contains_any"
+                                  },
+                                  "input": {
+                                    "type": "string",
+                                    "pattern": "^[a-zA-Z_][a-zA-Z0-9_]{0,79}$"
+                                  },
+                                  "fields": {
+                                    "minItems": 1,
+                                    "maxItems": 30,
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string",
+                                      "maxLength": 250
+                                    }
+                                  },
+                                  "terminal_collection": {
+                                    "anyOf": [
+                                      {
+                                        "type": "string",
+                                        "maxLength": 250
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "kind",
+                                  "input",
+                                  "fields",
+                                  "terminal_collection"
+                                ],
+                                "additionalProperties": false
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "kind": {
+                                    "type": "string",
+                                    "const": "join"
+                                  },
+                                  "step": {
+                                    "type": "integer",
+                                    "minimum": 0,
+                                    "maximum": 7
+                                  },
+                                  "collection": {
+                                    "type": "string",
+                                    "maxLength": 250
+                                  },
+                                  "terminal_collection": {
+                                    "anyOf": [
+                                      {
+                                        "type": "string",
+                                        "maxLength": 250
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  },
+                                  "identity": {
+                                    "type": "string",
+                                    "maxLength": 250
+                                  },
+                                  "fields": {
+                                    "minItems": 2,
+                                    "maxItems": 30,
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string",
+                                      "maxLength": 250
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "kind",
+                                  "step",
+                                  "collection",
+                                  "terminal_collection",
+                                  "identity",
+                                  "fields"
+                                ],
+                                "additionalProperties": false
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "kind": {
+                                    "type": "string",
+                                    "const": "complete_search"
+                                  },
+                                  "step": {
+                                    "type": "integer",
+                                    "minimum": 0,
+                                    "maximum": 7
+                                  },
+                                  "collection": {
+                                    "type": "string",
+                                    "maxLength": 250
+                                  },
+                                  "terminal_collection": {
+                                    "type": "string",
+                                    "maxLength": 250
+                                  },
+                                  "identity": {
+                                    "type": "string",
+                                    "maxLength": 250
+                                  },
+                                  "filters": {
+                                    "minItems": 1,
+                                    "maxItems": 8,
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "input": {
+                                          "type": "string",
+                                          "pattern": "^[a-zA-Z_][a-zA-Z0-9_]{0,79}$"
+                                        },
+                                        "fields": {
+                                          "minItems": 1,
+                                          "maxItems": 30,
+                                          "type": "array",
+                                          "items": {
+                                            "type": "string",
+                                            "maxLength": 250
+                                          }
+                                        }
+                                      },
+                                      "required": [
+                                        "input",
+                                        "fields"
+                                      ],
+                                      "additionalProperties": false
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "kind",
+                                  "step",
+                                  "collection",
+                                  "terminal_collection",
+                                  "identity",
+                                  "filters"
+                                ],
+                                "additionalProperties": false
+                              }
+                            ]
+                          }
+                        },
+                        "discovery": {
+                          "type": "string",
+                          "const": "demonstration_guided_dependency_inference"
+                        },
+                        "autonomous_discovery": {
+                          "type": "boolean",
+                          "const": false
+                        }
+                      },
+                      "required": [
+                        "source_mode",
+                        "transport",
+                        "observed_at",
+                        "workflow",
+                        "steps_completed",
+                        "calls",
+                        "verification",
+                        "discovery",
+                        "autonomous_discovery"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "evidence"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized or session expired"
+          },
+          "404": {
+            "description": "No match or unknown workflow"
+          },
+          "429": {
+            "description": "Rate limited; no automatic retry"
+          },
+          "502": {
+            "description": "Upstream changed, rejected or inconsistent"
+          }
+        }
+      }
+    },
+    "/v1/workflows/uvcv_list_courses": {
+      "post": {
+        "operationId": "uvcv_list_courses",
+        "description": "Lista los cursos matriculados en UVCV. Sesión autenticada de solo lectura; no envía tareas ni modifica el perfil.",
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "localBrowserSession": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {},
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Workflow result with source evidence and explicit limits.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$schema": "https://json-schema.org/draft/2020-12/schema",
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "courses": {
+                          "maxItems": 250,
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer",
+                                "exclusiveMinimum": 0,
+                                "maximum": 9007199254740991
+                              },
+                              "fullname": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 500
+                              },
+                              "shortname": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 200
+                              },
+                              "categoryid": {
+                                "type": "integer",
+                                "exclusiveMinimum": 0,
+                                "maximum": 9007199254740991
+                              },
+                              "startdate": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 9007199254740991
+                              },
+                              "enddate": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 9007199254740991
+                              },
+                              "visible": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "fullname",
+                              "shortname"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "total": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991
+                        },
+                        "truncated": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "courses",
+                        "total",
+                        "truncated"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "evidence": {
+                      "type": "object",
+                      "properties": {
+                        "source_mode": {
+                          "type": "string",
+                          "const": "observed_first_party_http"
+                        },
+                        "scope": {
+                          "type": "string",
+                          "const": "uvcv_authenticated_read_only"
+                        },
+                        "transport": {
+                          "type": "string",
+                          "const": "http_only"
+                        },
+                        "session": {
+                          "type": "string",
+                          "const": "user_moodle_session"
+                        },
+                        "observed_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                        },
+                        "verification": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "cached": {
+                          "type": "boolean"
+                        },
+                        "limits": {
+                          "minItems": 1,
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "required": [
+                        "source_mode",
+                        "scope",
+                        "transport",
+                        "session",
+                        "observed_at",
+                        "verification",
+                        "cached",
+                        "limits"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "evidence"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized or session expired"
+          },
+          "404": {
+            "description": "No match or unknown workflow"
+          },
+          "429": {
+            "description": "Rate limited; no automatic retry"
+          },
+          "502": {
+            "description": "Upstream changed, rejected or inconsistent"
+          }
+        }
+      }
+    },
+    "/v1/workflows/uvcv_get_course": {
+      "post": {
+        "operationId": "uvcv_get_course",
+        "description": "Devuelve secciones y módulos (recursos, cuestionarios, foros, tareas) de un curso UVCV, contrastando que el curso esté matriculado.",
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "localBrowserSession": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "courseid": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 1000000000
+                  }
+                },
+                "required": [
+                  "courseid"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Workflow result with source evidence and explicit limits.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$schema": "https://json-schema.org/draft/2020-12/schema",
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "courseid": {
+                          "type": "integer",
+                          "exclusiveMinimum": 0,
+                          "maximum": 9007199254740991
+                        },
+                        "fullname": {
+                          "type": "string",
+                          "maxLength": 500
+                        },
+                        "section_count": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991
+                        },
+                        "module_count": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991
+                        },
+                        "sections": {
+                          "maxItems": 100,
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "pattern": "^\\d+$"
+                              },
+                              "number": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 9007199254740991
+                              },
+                              "title": {
+                                "type": "string",
+                                "maxLength": 500
+                              },
+                              "visible": {
+                                "type": "boolean"
+                              },
+                              "modules": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string",
+                                      "pattern": "^\\d+$"
+                                    },
+                                    "name": {
+                                      "type": "string",
+                                      "minLength": 1,
+                                      "maxLength": 500
+                                    },
+                                    "type": {
+                                      "type": "string",
+                                      "minLength": 1,
+                                      "maxLength": 80
+                                    },
+                                    "plugin": {
+                                      "type": "string",
+                                      "minLength": 1,
+                                      "maxLength": 80
+                                    },
+                                    "url": {
+                                      "anyOf": [
+                                        {
+                                          "type": "string",
+                                          "format": "uri"
+                                        },
+                                        {
+                                          "type": "null"
+                                        }
+                                      ]
+                                    },
+                                    "visible": {
+                                      "type": "boolean"
+                                    },
+                                    "sectionid": {
+                                      "type": "string",
+                                      "pattern": "^\\d+$"
+                                    }
+                                  },
+                                  "required": [
+                                    "id",
+                                    "name",
+                                    "type",
+                                    "plugin",
+                                    "url",
+                                    "visible"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "number",
+                              "title",
+                              "visible",
+                              "modules"
+                            ],
+                            "additionalProperties": false
+                          }
+                        }
+                      },
+                      "required": [
+                        "courseid",
+                        "fullname",
+                        "section_count",
+                        "module_count",
+                        "sections"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "evidence": {
+                      "type": "object",
+                      "properties": {
+                        "source_mode": {
+                          "type": "string",
+                          "const": "observed_first_party_http"
+                        },
+                        "scope": {
+                          "type": "string",
+                          "const": "uvcv_authenticated_read_only"
+                        },
+                        "transport": {
+                          "type": "string",
+                          "const": "http_only"
+                        },
+                        "session": {
+                          "type": "string",
+                          "const": "user_moodle_session"
+                        },
+                        "observed_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                        },
+                        "verification": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "cached": {
+                          "type": "boolean"
+                        },
+                        "limits": {
+                          "minItems": 1,
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "required": [
+                        "source_mode",
+                        "scope",
+                        "transport",
+                        "session",
+                        "observed_at",
+                        "verification",
+                        "cached",
+                        "limits"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "evidence"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized or session expired"
+          },
+          "404": {
+            "description": "No match or unknown workflow"
+          },
+          "429": {
+            "description": "Rate limited; no automatic retry"
+          },
+          "502": {
+            "description": "Upstream changed, rejected or inconsistent"
+          }
+        }
+      }
+    },
+    "/v1/workflows/uvcv_list_assignments": {
+      "post": {
+        "operationId": "uvcv_list_assignments",
+        "description": "Lista las tareas (módulo assign) de un curso UVCV. Vacío es un resultado válido; no entrega ni califica tareas.",
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "localBrowserSession": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "courseid": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 1000000000
+                  }
+                },
+                "required": [
+                  "courseid"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Workflow result with source evidence and explicit limits.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$schema": "https://json-schema.org/draft/2020-12/schema",
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "courseid": {
+                          "type": "integer",
+                          "exclusiveMinimum": 0,
+                          "maximum": 9007199254740991
+                        },
+                        "assignments": {
+                          "maxItems": 250,
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "pattern": "^\\d+$"
+                              },
+                              "name": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 500
+                              },
+                              "type": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 80
+                              },
+                              "plugin": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 80
+                              },
+                              "url": {
+                                "anyOf": [
+                                  {
+                                    "type": "string",
+                                    "format": "uri"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              },
+                              "visible": {
+                                "type": "boolean"
+                              },
+                              "sectionid": {
+                                "type": "string",
+                                "pattern": "^\\d+$"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "name",
+                              "type",
+                              "plugin",
+                              "url",
+                              "visible"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "total": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991
+                        }
+                      },
+                      "required": [
+                        "courseid",
+                        "assignments",
+                        "total"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "evidence": {
+                      "type": "object",
+                      "properties": {
+                        "source_mode": {
+                          "type": "string",
+                          "const": "observed_first_party_http"
+                        },
+                        "scope": {
+                          "type": "string",
+                          "const": "uvcv_authenticated_read_only"
+                        },
+                        "transport": {
+                          "type": "string",
+                          "const": "http_only"
+                        },
+                        "session": {
+                          "type": "string",
+                          "const": "user_moodle_session"
+                        },
+                        "observed_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                        },
+                        "verification": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "cached": {
+                          "type": "boolean"
+                        },
+                        "limits": {
+                          "minItems": 1,
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "required": [
+                        "source_mode",
+                        "scope",
+                        "transport",
+                        "session",
+                        "observed_at",
+                        "verification",
+                        "cached",
+                        "limits"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "evidence"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized or session expired"
+          },
+          "404": {
+            "description": "No match or unknown workflow"
+          },
+          "429": {
+            "description": "Rate limited; no automatic retry"
+          },
+          "502": {
+            "description": "Upstream changed, rejected or inconsistent"
+          }
+        }
+      }
+    },
+    "/v1/workflows/uvcv_get_grades": {
+      "post": {
+        "operationId": "uvcv_get_grades",
+        "description": "Notas del usuario en un curso UVCV. Contraste entre la página de notas y las definiciones de ítems; no es un récord académico oficial.",
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "localBrowserSession": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "courseid": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 1000000000
+                  }
+                },
+                "required": [
+                  "courseid"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Workflow result with source evidence and explicit limits.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$schema": "https://json-schema.org/draft/2020-12/schema",
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "courseid": {
+                          "type": "integer",
+                          "exclusiveMinimum": 0,
+                          "maximum": 9007199254740991
+                        },
+                        "items": {
+                          "maxItems": 250,
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "itemid": {
+                                "type": "string",
+                                "pattern": "^\\d+$"
+                              },
+                              "name": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 500
+                              },
+                              "grade": {
+                                "anyOf": [
+                                  {
+                                    "type": "string",
+                                    "maxLength": 200
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              },
+                              "feedback": {
+                                "anyOf": [
+                                  {
+                                    "type": "string",
+                                    "maxLength": 2000
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              }
+                            },
+                            "required": [
+                              "itemid",
+                              "name",
+                              "grade",
+                              "feedback"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "total": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991
+                        }
+                      },
+                      "required": [
+                        "courseid",
+                        "items",
+                        "total"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "evidence": {
+                      "type": "object",
+                      "properties": {
+                        "source_mode": {
+                          "type": "string",
+                          "const": "observed_first_party_http"
+                        },
+                        "scope": {
+                          "type": "string",
+                          "const": "uvcv_authenticated_read_only"
+                        },
+                        "transport": {
+                          "type": "string",
+                          "const": "http_only"
+                        },
+                        "session": {
+                          "type": "string",
+                          "const": "user_moodle_session"
+                        },
+                        "observed_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                        },
+                        "verification": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "cached": {
+                          "type": "boolean"
+                        },
+                        "limits": {
+                          "minItems": 1,
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "required": [
+                        "source_mode",
+                        "scope",
+                        "transport",
+                        "session",
+                        "observed_at",
+                        "verification",
+                        "cached",
+                        "limits"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "evidence"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized or session expired"
+          },
+          "404": {
+            "description": "No match or unknown workflow"
+          },
+          "429": {
+            "description": "Rate limited; no automatic retry"
+          },
+          "502": {
+            "description": "Upstream changed, rejected or inconsistent"
+          }
+        }
+      }
+    },
+    "/v1/workflows/uvcv_upcoming_events": {
+      "post": {
+        "operationId": "uvcv_upcoming_events",
+        "description": "Próximos eventos del calendario UVCV (exámenes, tutorías, entregas) con fecha, curso y enlace. Solo lectura.",
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "localBrowserSession": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "max_results": {
+                    "default": 20,
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 50
+                  }
+                },
+                "required": [
+                  "max_results"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Workflow result with source evidence and explicit limits.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$schema": "https://json-schema.org/draft/2020-12/schema",
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "events": {
+                          "maxItems": 50,
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer",
+                                "exclusiveMinimum": 0,
+                                "maximum": 9007199254740991
+                              },
+                              "name": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 500
+                              },
+                              "timestart": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 9007199254740991
+                              },
+                              "time": {
+                                "type": "string",
+                                "format": "date-time",
+                                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                              },
+                              "courseid": {
+                                "type": "integer",
+                                "exclusiveMinimum": 0,
+                                "maximum": 9007199254740991
+                              },
+                              "modulename": {
+                                "type": "string",
+                                "maxLength": 80
+                              },
+                              "url": {
+                                "anyOf": [
+                                  {
+                                    "type": "string",
+                                    "format": "uri"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              },
+                              "overdue": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "name",
+                              "timestart",
+                              "time",
+                              "url"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "total": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991
+                        },
+                        "truncated": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "events",
+                        "total",
+                        "truncated"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "evidence": {
+                      "type": "object",
+                      "properties": {
+                        "source_mode": {
+                          "type": "string",
+                          "const": "observed_first_party_http"
+                        },
+                        "scope": {
+                          "type": "string",
+                          "const": "uvcv_authenticated_read_only"
+                        },
+                        "transport": {
+                          "type": "string",
+                          "const": "http_only"
+                        },
+                        "session": {
+                          "type": "string",
+                          "const": "user_moodle_session"
+                        },
+                        "observed_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                        },
+                        "verification": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "cached": {
+                          "type": "boolean"
+                        },
+                        "limits": {
+                          "minItems": 1,
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "required": [
+                        "source_mode",
+                        "scope",
+                        "transport",
+                        "session",
+                        "observed_at",
+                        "verification",
+                        "cached",
+                        "limits"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "evidence"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized or session expired"
+          },
+          "404": {
+            "description": "No match or unknown workflow"
+          },
+          "429": {
+            "description": "Rate limited; no automatic retry"
+          },
+          "502": {
+            "description": "Upstream changed, rejected or inconsistent"
+          }
+        }
+      }
+    },
+    "/v1/catalog": {
+      "get": {
+        "operationId": "catalog",
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "localBrowserSession": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Current workflow catalog, including typed inputs and outputs"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/learn": {
+      "post": {
+        "operationId": "learn_workflow",
+        "description": "Validate a reviewed read-only capture against independent evaluation inputs, persist it and update the live catalog.",
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "localBrowserSession": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "reviewed",
+                  "capture"
+                ],
+                "properties": {
+                  "reviewed": {
+                    "const": true
+                  },
+                  "capture": {
+                    "type": "object",
+                    "description": "Reviewed operations, training demonstrations and held-out evaluation. See examples/learn-laptop.json."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Verified workflow available immediately"
+          },
+          "400": {
+            "description": "Invalid capture"
+          },
+          "403": {
+            "description": "Operation review required"
+          },
+          "409": {
+            "description": "Duplicate workflow or learning already in progress"
+          },
+          "502": {
+            "description": "Compilation or evaluation failed; workflow not published"
+          }
+        }
+      }
+    },
+    "/v1/discoveries": {
+      "post": {
+        "operationId": "discover_product_lookup",
+        "description": "Discover the supported list-to-detail pattern with an isolated browser, then evaluate and publish an HTTP recipe. Other task families are rejected.",
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "localBrowserSession": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "maxLength": 2000,
+                    "format": "uri"
+                  },
+                  "task": {
+                    "type": "string",
+                    "const": "product_lookup"
+                  },
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9_]{1,79}$"
+                  },
+                  "category": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 80
+                  },
+                  "reviewed_requests": {
+                    "default": [],
+                    "maxItems": 8,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "origin": {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        "path": {
+                          "type": "string",
+                          "pattern": "^\\/[a-zA-Z0-9_/-]+$"
+                        },
+                        "method": {
+                          "type": "string",
+                          "enum": [
+                            "GET",
+                            "POST"
+                          ]
+                        },
+                        "allow_json_text": {
+                          "default": false,
+                          "type": "boolean"
+                        },
+                        "success": {
+                          "default": {},
+                          "type": "object",
+                          "propertyNames": {
+                            "type": "string",
+                            "maxLength": 250
+                          },
+                          "additionalProperties": {
+                            "anyOf": [
+                              {
+                                "type": "string",
+                                "maxLength": 1000
+                              },
+                              {
+                                "type": "number"
+                              },
+                              {
+                                "type": "boolean"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "origin",
+                        "path",
+                        "method",
+                        "allow_json_text",
+                        "success"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "reviewed": {
+                    "default": false,
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "url",
+                  "task",
+                  "id",
+                  "reviewed_requests",
+                  "reviewed"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Discovery job started; inspect its status before calling the workflow"
+          },
+          "400": {
+            "description": "Unsupported task or invalid target"
+          },
+          "403": {
+            "description": "Operation review required"
+          },
+          "409": {
+            "description": "Discovery already in progress"
+          }
+        }
+      }
+    },
+    "/v1/discoveries/{job_id}": {
+      "get": {
+        "operationId": "get_discovery",
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "localBrowserSession": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Observed progress and terminal verified/failed state"
+          },
+          "404": {
+            "description": "Unknown or evicted job"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      },
+      "localBrowserSession": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "web2api_session",
+        "description": "Issued only by the standalone local UI; HttpOnly and SameSite=Strict."
+      }
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "status": "passed",
+  "observed_at": "2026-10-20T15:23:37.308Z",
+  "scope": "uvcv_authenticated_read_only",
+  "source": "live_first_party_http_with_user_authorized_session",
+  "session": "user_moodle_session",
+  "provider": "moodle_ajax_and_grade_report_html",
+  "cases": [
+    {
+      "name": "uvcv_list_courses",
+      "status": "passed",
+      "duration_ms": 2695,
+      "courses": 5,
+      "unique_ids": 5
+    },
+    {
+      "name": "uvcv_get_course",
+      "status": "passed",
+      "duration_ms": 512,
+      "sections": 18,
+      "modules": 33
+    },
+    {
+      "name": "uvcv_list_assignments",
+      "status": "passed",
+      "duration_ms": 2,
+      "assignments": 0
+    },
+    {
+      "name": "uvcv_get_grades",
+      "status": "passed",
+      "duration_ms": 732,
+      "grade_items": 9
+    },
+    {
+      "name": "uvcv_upcoming_events",
+      "status": "passed",
+      "duration_ms": 936,
+      "events": 10,
+      "returned": 3,
+      "truncated": true
+    }
+  ],
+  "checks": [
+    "enrolled_courses_nonempty_and_ids_unique",
+    "course_state_sections_and_modules_nonempty",
+    "assignment_filter_matches_course_modules",
+    "grade_report_rows_crosschecked_against_definitions",
+    "events_sorted_unique_and_truncation_reported",
+    "invalid_input_rejected_before_fetch"
+  ],
+  "adapter_hash": "ab5a41ad395d2da59000aa3b002d159f6557e20904f9cde23a513f8c4a6df6dd",
+  "limits": [
+    "Uses the authorized student session; only read operations are implemented.",
+    "Grades are cross-checked against grade-item definitions, not against an official academic record.",
+    "Moodle functions disabled for this account surface as UNSUPPORTED_OPERATION.",
+    "No names, grades or cookies are stored in this evidence file."
+  ],
+  "finished_at": "2026-10-20T15:23:37.309Z"
+}

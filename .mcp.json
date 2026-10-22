@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "web2api-uvcv": {
+      "command": "node",
+      "args": ["src/mcp-uvcv.mjs"]
+    },
+    "web2api-whatsapp": {
+      "command": "node",
+      "args": ["src/mcp-whatsapp.mjs"]
+    }
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "status": "passed",
+  "observed_at": "2026-10-17T18:40:46.519Z",
+  "workflow": "lookup_demoblaze_laptop",
+  "source_mode": "observed_first_party_http",
+  "discovery": "agent_assisted_browser_capture",
+  "autonomous_discovery": false,
+  "site_specific_code_added": false,
+  "general_engine_fix_found_during_discovery": "trim_name_selection",
+  "packaged_learner": true,
+  "packaged_mcp": true,
+  "node_modules_required": false,
+  "tools_exposed": [
+    "search_usgar_rooms",
+    "lookup_demoblaze_phone",
+    "search_automation_products",
+    "lookup_demoblaze_laptop"
+  ],
+  "cases": [
+    {
+      "input": {
+        "product_name": "Sony vaio i5"
+      },
+      "role": "training_replay",
+      "status": "passed",
+      "id": 8,
+      "visual": {
+        "title": "Sony vaio i5",
+        "price_label": "$790 *includes tax",
+        "page_url": "https://www.demoblaze.com/prod.html?idp_=8"
+      }
+    },
+    {
+      "input": {
+        "product_name": "Sony vaio i7"
+      },
+      "role": "training_replay",
+      "status": "passed",
+      "id": 9,
+      "visual": {
+        "title": "Sony vaio i7",
+        "price_label": "$790 *includes tax",
+        "page_url": "https://www.demoblaze.com/prod.html?idp_=9"
+      }
+    },
+    {
+      "input": {
+        "product_name": "MacBook Pro"
+      },
+      "role": "held_out_input",
+      "status": "passed",
+      "id": 15,
+      "visual": {
+        "title": "MacBook Pro",
+        "price_label": "$1100 *includes tax",
+        "page_url": "https://www.demoblaze.com/prod.html?idp_=15"
+      }
+    }
+  ],
+  "negative_cases": [
+    "missing_product"
+  ],
+  "capture_path": "examples/learn-laptop.json",
+  "screenshot": "assets/validation/learned-laptop.png"
+}

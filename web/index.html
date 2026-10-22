@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Web2API — Workflow Studio</title><link rel="stylesheet" href="/style.css"><script type="module" src="/app.js"></script></head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <a class="brand" href="/" aria-label="Web2API inicio"><span class="brand-mark">w/</span> Web2API</a>
+    <span class="overline">WORKFLOW STUDIO</span>
+    <nav aria-label="Secciones"><a href="#workspace" class="nav-active">Workflows <span id="workflow-count">—</span></a><a href="#discover">Descubrir desde URL <span>+</span></a><a href="#learn">Importar evidencia <span>+</span></a><a href="#sessions">Conexiones <span>↗</span></a></nav>
+    <div class="sidebar-note"><span class="status-dot"></span> Backend local<p>El descubrimiento produce el contrato. La ejecución usa API.</p><code>127.0.0.1 · HTTP</code></div>
+  </aside>
+  <main>
+    <header class="topbar"><span>Tu espacio de trabajo <span class="muted">/</span> Flujos verificados</span><div class="topbar-actions"><a href="/v1/openapi.json" target="_blank" rel="noopener">Contrato OpenAPI ↗</a><span class="local-tag">LOCAL APP</span></div></header>
+    <section class="intro"><div><p class="overline">EXPLORAR UNA VEZ. EJECUTAR POR API.</p><h1>De un recorrido<br>a una herramienta.</h1><p class="lede">Comprueba el resultado, conserva la evidencia y reutiliza el contrato.</p></div><div class="intro-note"><span class="big-number" id="verified-count">—</span><span>workflows disponibles<br>sin llamadas al modelo al ejecutar</span></div></section>
+    <section id="discover" class="discovery-panel" aria-labelledby="discover-title"><div class="section-heading"><h2 id="discover-title">Descubrir desde una URL</h2><span>Patrón disponible: catálogo → ficha</span></div>
+      <form id="discover-form"><div class="discovery-fields"><label>Web autorizada<input id="discover-url" type="url" value="https://www.demoblaze.com/" required></label><label>Objetivo<select id="discover-task"><option value="product_lookup">Consultar un producto por nombre</option></select></label><label>Categoría visible (opcional)<input id="discover-category" value="Laptops" maxlength="80"></label><label>Nombre del workflow<input id="discover-id" value="lookup_discovered_laptops" pattern="[a-z][a-z0-9_]{1,79}" required></label></div><button id="discover-button" class="primary">Descubrir y validar <span>↗</span></button></form>
+      <p class="muted">El backend elige ejemplos y observa sus llamadas. Cierra el navegador antes de probar el contrato por HTTP. Este patrón no interpreta objetivos arbitrarios.</p>
+      <label id="discover-review-label" class="check-label" hidden><input id="discover-reviewed" type="checkbox"> He revisado las operaciones bloqueadas y confirmado que son lecturas autorizadas.</label>
+      <pre id="discovery-progress" role="status" aria-live="polite">Introduce una URL y elige el objetivo. No necesitas aportar rutas API ni IDs de productos.</pre>
+    </section>
+    <section id="workspace" aria-labelledby="workspace-title">
+      <div class="section-heading"><h2 id="workspace-title">Tu catálogo</h2><span id="catalog-status" role="status">Conectando con el backend…</span></div>
+      <div class="workspace-grid">
+        <div id="workflows" class="workflow-list" aria-label="Workflows disponibles"></div>
+        <article class="runner">
+          <div class="runner-top"><span class="overline">EJECUTAR</span><span class="read-tag">LECTURA</span></div>
+          <h3 id="workflow-title">Selecciona un workflow</h3><p id="workflow-description" class="muted"></p><code id="workflow-route" class="workflow-route"></code>
+          <form id="run-form"><div id="fields" class="fields"></div><button id="run-button" class="primary" disabled>Ejecutar por API <span>↗</span></button></form>
+          <p id="run-status" class="run-status" role="status" aria-live="polite">Elige una operación del catálogo.</p>
+          <div class="result-header"><h4>Resultado</h4><span id="duration" class="muted"></span></div>
+          <pre id="result" tabindex="0">La respuesta estructurada aparecerá aquí.</pre>
+          <details><summary>Procedencia y comprobaciones</summary><pre id="evidence">Se adjuntan después de ejecutar.</pre></details>
+        </article>
+      </div>
+    </section>
+    <section id="learn" class="learn-section" aria-labelledby="learn-title"><div><p class="overline">DE LA EVIDENCIA AL CONTRATO</p><h2 id="learn-title">Enseña un flujo.<br>Prueba otro caso.</h2><p>Importa demostraciones revisadas y un caso reservado. El backend infiere la receta, repite las llamadas HTTP y solo la incorpora si coincide con la evidencia esperada.</p><p class="muted">La importación cubre otros recorridos observados. El descubridor automático superior implementa únicamente el patrón catálogo → ficha.</p></div>
+      <div class="learning-panel"><label for="capture-file">Captura revisada · JSON</label><input id="capture-file" type="file" accept=".json,application/json"><button id="load-example" class="secondary">Usar ejemplo de portátiles</button><pre id="capture-review">Importa una captura para revisar las operaciones.</pre><label class="check-label"><input id="reviewed" type="checkbox"> He revisado los destinos y confirmado que todas las operaciones son de lectura autorizada.</label><button id="learn-button" class="primary" disabled>Validar e incorporar <span>+</span></button><p id="learn-status" role="status" aria-live="polite">Se requieren dos demostraciones y al menos un caso reservado.</p></div>
+    </section>
+    <section id="sessions" class="sessions" aria-labelledby="sessions-title"><div class="section-heading"><h2 id="sessions-title">Sitios con inicio de sesión</h2><span>Estado de compatibilidad</span></div><div class="connection-grid">
+      <article><span class="connection-state ready">DISPONIBLE</span><h3>API pública</h3><p>Los workflows del catálogo se ejecutan sin cookies ni navegador.</p></article>
+      <article><span class="connection-state pending">PENDIENTE DE IMPLEMENTAR</span><h3>OAuth y sesión web</h3><p>API oficial con permisos mínimos o sesión local autorizada. El login lo completa la persona; la ejecución debe validar sus llamadas API.</p></article>
+      <article><span class="connection-state pending">SIN CONECTOR</span><h3>X y WhatsApp</h3><p>X tuvo replay con la sesión de investigación. WhatsApp solo tuvo comprobación visual. Aún no son integraciones de esta app.</p></article>
+    </div></section>
+    <footer>Web2API <span>Descubrimiento asistido · verificación explícita · ejecución HTTP</span></footer>
+  </main>
+</div>
+</body></html>

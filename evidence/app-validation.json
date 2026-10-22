@@ -1,0 +1,26 @@
+{
+  "status": "passed",
+  "observed_at": "2026-10-17T18:40:42.158Z",
+  "source": "standalone_app_copied_outside_repository",
+  "node_modules_required": false,
+  "codex_required": false,
+  "plugin_manifest_required": false,
+  "backend_restart_tested": true,
+  "checks": [
+    "anonymous_api_rejected",
+    "local_ui_session",
+    "catalog_schemas",
+    "live_capture_learning",
+    "immediate_catalog_update",
+    "dynamic_openapi",
+    "live_reserved_case",
+    "foreign_origin_rejected",
+    "local_session_rotated_on_restart",
+    "workflow_persisted_across_restart",
+    "site_whitespace_preserved",
+    "missing_product_rejected"
+  ],
+  "discovery": "reviewed_capture_import",
+  "autonomous_url_discovery": false,
+  "authenticated_site_connectors": false
+}

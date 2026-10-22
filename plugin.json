@@ -1,0 +1,19 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "web2api",
+  "version": "0.3.0",
+  "description": "Verified HTTP-only read workflows for USGAR, Demoblaze and Automation Exercise, with demonstration-guided dependency inference.",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Web2API",
+        "shortDescription": "Flujos web por API verificados",
+        "longDescription": "Consulta USGAR y catálogos demo mediante workflows HTTP. Infiere parámetros y dependencias desde demostraciones y verifica contra catálogo, calendario y evidencia visual. No realiza compras ni reservas.",
+        "developerName": "Web2API",
+        "category": "Productivity",
+        "capabilities": ["Read"],
+        "defaultPrompt": "Usa los workflows API verificados de Web2API y explica su evidencia y límites."
+      }
+    }
+  }
+}

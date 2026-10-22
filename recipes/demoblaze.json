@@ -1,0 +1,126 @@
+{
+  "version": 3,
+  "id": "lookup_demoblaze_phone",
+  "effect": "read",
+  "source_mode": "observed_first_party_http",
+  "input_fields": [
+    "product_name"
+  ],
+  "steps": [
+    {
+      "origin": "https://api.demoblaze.com",
+      "path": "/bycat",
+      "method": "POST",
+      "encoding": "json",
+      "allow_json_text": false,
+      "params": {
+        "cat": {
+          "kind": "literal",
+          "value": "phone"
+        }
+      },
+      "shape": {
+        "type": "object",
+        "fields": {
+          "Items": {
+            "type": "array",
+            "item": {
+              "type": "object",
+              "fields": {
+                "cat": {
+                  "type": "string"
+                },
+                "desc": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "number"
+                },
+                "img": {
+                  "type": "string"
+                },
+                "price": {
+                  "type": "number"
+                },
+                "title": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "success": {}
+    },
+    {
+      "origin": "https://api.demoblaze.com",
+      "path": "/view",
+      "method": "POST",
+      "encoding": "json",
+      "allow_json_text": false,
+      "params": {
+        "id": {
+          "kind": "selection",
+          "step": 0,
+          "collection": "Items",
+          "match_field": "title",
+          "input": "product_name",
+          "value_field": "id",
+          "cast": "string"
+        }
+      },
+      "shape": {
+        "type": "object",
+        "fields": {
+          "cat": {
+            "type": "string"
+          },
+          "desc": {
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "img": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "title": {
+            "type": "string"
+          }
+        }
+      },
+      "success": {}
+    }
+  ],
+  "checks": [
+    {
+      "kind": "join",
+      "step": 0,
+      "collection": "Items",
+      "terminal_collection": null,
+      "identity": "desc",
+      "fields": [
+        "cat",
+        "desc",
+        "id",
+        "img",
+        "price",
+        "title"
+      ]
+    },
+    {
+      "kind": "contains_any",
+      "input": "product_name",
+      "fields": [
+        "desc",
+        "title"
+      ],
+      "terminal_collection": null
+    }
+  ],
+  "observed_at": "2026-10-17T18:23:18.025Z",
+  "discovery": "demonstration_guided_dependency_inference"
+}

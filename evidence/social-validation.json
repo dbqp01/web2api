@@ -1,0 +1,67 @@
+{
+  "observed_at": "2026-10-17T18:00:26.256Z",
+  "scope": "read_only_social_workflow_probe",
+  "writes_performed": [],
+  "credentials_exported": false,
+  "private_messages_persisted": false,
+  "private_contacts_persisted": false,
+  "whatsapp": {
+    "authenticated_session_visible": true,
+    "ui_checks": {
+      "no_match_search_visually_verified": true,
+      "self_chat_search": true,
+      "self_chat_header_visually_verified": true,
+      "composer_present": true
+    },
+    "api_replay_verified": false,
+    "network_diagnostics": "CDP unavailable on this tab while resolving a paused document response",
+    "classification": "insufficient_transport_evidence",
+    "published_as_plugin_tool": false
+  },
+  "x": {
+    "public_targets_only": true,
+    "request_capture_truncated": true,
+    "operations_verified": [
+      "UserByScreenName",
+      "UserOriginalsTimeline",
+      "TweetDetail"
+    ],
+    "transport": "browser_session_http",
+    "replay_uses_dom_or_vision": false,
+    "credentials_stayed_in_existing_browser_session": true,
+    "standalone_node_runtime_verified": false,
+    "published_as_plugin_tool": false,
+    "cases": [
+      {
+        "handle": "nextjs",
+        "user_id": "1467726470533754880",
+        "selected_post_id": "2084399799642841419",
+        "profile_status": 200,
+        "timeline_status": 200,
+        "detail_status": 200,
+        "detail_identity_verified": true,
+        "visual_confirmation": "public_detail_screenshot_inspected",
+        "screenshot": "assets/validation/x-nextjs-public.png"
+      },
+      {
+        "handle": "reactjs",
+        "user_id": "1566463268",
+        "selected_post_id": "2097766969080680729",
+        "profile_status": 200,
+        "timeline_status": 200,
+        "detail_status": 200,
+        "detail_identity_verified": true,
+        "visual_confirmation": "public_detail_screenshot_inspected",
+        "screenshot": "assets/validation/x-react-public.png"
+      }
+    ],
+    "unsupported_diagnostic_command": "Network.replayXHR",
+    "successful_replay_method": "same_origin_fetch_via_Runtime.evaluate_with_browser_held_session",
+    "screenshot_capture_recovery": "One timed-out screenshot; succeeded after the page finished rendering."
+  },
+  "limits": [
+    "No sending, posting, liking, following or account changes.",
+    "No proof that browser-session replay works as an independent Node plugin or survives session expiry.",
+    "WhatsApp API transport was not verified; documentation about E2EE is not a live transport capture."
+  ]
+}

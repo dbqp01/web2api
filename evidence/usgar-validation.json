@@ -1,0 +1,181 @@
+{
+  "status": "passed",
+  "observed_at": "2026-10-17T17:37:03.427Z",
+  "scope": "usgar_public_read_only",
+  "autonomous_discovery": false,
+  "source": "live_public_website_network",
+  "created_bookings": 0,
+  "payments": 0,
+  "cases": [
+    {
+      "input": {
+        "check_in": "2026-11-01",
+        "check_out": "2026-11-03",
+        "guests": 2
+      },
+      "status": "passed",
+      "duration_ms": 560.8231000000001,
+      "result": {
+        "data": {
+          "query": {
+            "check_in": "2026-11-01",
+            "check_out": "2026-11-03",
+            "guests": 2,
+            "max_results": 20
+          },
+          "nights": 2,
+          "currency": "USD",
+          "rooms": [
+            {
+              "id": 1,
+              "slug": "matrimonial",
+              "name": "Matrimonial Superior",
+              "max_guests": 3,
+              "available_quantity_reported": 3,
+              "standard_nightly_cents": 6500,
+              "standard_stay_cents": 13000,
+              "non_refundable_nightly_cents": 6500,
+              "non_refundable_stay_cents": 13000,
+              "source_url": "https://usgarhoteles.com/es/rooms/matrimonial/"
+            },
+            {
+              "id": 2,
+              "slug": "doble-superior",
+              "name": "Doble Superior",
+              "max_guests": 3,
+              "available_quantity_reported": 8,
+              "standard_nightly_cents": 6500,
+              "standard_stay_cents": 13000,
+              "non_refundable_nightly_cents": 5850,
+              "non_refundable_stay_cents": 11700,
+              "source_url": "https://usgarhoteles.com/es/rooms/doble-superior/"
+            },
+            {
+              "id": 3,
+              "slug": "triple-standar",
+              "name": "Triple Estándar",
+              "max_guests": 4,
+              "available_quantity_reported": 3,
+              "standard_nightly_cents": 9000,
+              "standard_stay_cents": 18000,
+              "non_refundable_nightly_cents": 8100,
+              "non_refundable_stay_cents": 16200,
+              "source_url": "https://usgarhoteles.com/es/rooms/triple-standar/"
+            },
+            {
+              "id": 4,
+              "slug": "familiar-superior",
+              "name": "Familiar Superior",
+              "max_guests": 8,
+              "available_quantity_reported": 3,
+              "standard_nightly_cents": 12000,
+              "standard_stay_cents": 24000,
+              "non_refundable_nightly_cents": 10800,
+              "non_refundable_stay_cents": 21600,
+              "source_url": "https://usgarhoteles.com/es/rooms/familiar-superior/"
+            }
+          ],
+          "total": 4,
+          "truncated": false,
+          "availability_confirmed": false,
+          "price_basis": "site_reported_rate_for_dates; taxes_and_fees_not_independently_confirmed"
+        },
+        "evidence": {
+          "source_mode": "observed_first_party_http",
+          "scope": "usgar_public_read_only",
+          "evidence_level": "E4",
+          "source_urls": [
+            "https://usgarhoteles.com/api/rooms?checkIn=2026-11-01&checkOut=2026-11-03&lang=es",
+            "https://usgarhoteles.com/api/rooms/calendar?from=2026-11-01&to=2026-11-02"
+          ],
+          "observed_at": "2026-10-17T17:37:04.001Z",
+          "verification": "schema_dates_totals_and_calendar_crosscheck",
+          "transport": "http_only",
+          "cached": false,
+          "limits": [
+            "Inventory and rates are reported by USGAR, not independently checked against its PMS.",
+            "No booking hold or payment was created. Inventory may change."
+          ]
+        }
+      }
+    },
+    {
+      "input": {
+        "check_in": "2026-11-04",
+        "check_out": "2026-11-07",
+        "guests": 4
+      },
+      "status": "passed",
+      "duration_ms": 303.69939999999997,
+      "result": {
+        "data": {
+          "query": {
+            "check_in": "2026-11-04",
+            "check_out": "2026-11-07",
+            "guests": 4,
+            "max_results": 20
+          },
+          "nights": 3,
+          "currency": "USD",
+          "rooms": [
+            {
+              "id": 3,
+              "slug": "triple-standar",
+              "name": "Triple Estándar",
+              "max_guests": 4,
+              "available_quantity_reported": 3,
+              "standard_nightly_cents": 9000,
+              "standard_stay_cents": 27000,
+              "non_refundable_nightly_cents": 8100,
+              "non_refundable_stay_cents": 24300,
+              "source_url": "https://usgarhoteles.com/es/rooms/triple-standar/"
+            },
+            {
+              "id": 4,
+              "slug": "familiar-superior",
+              "name": "Familiar Superior",
+              "max_guests": 8,
+              "available_quantity_reported": 3,
+              "standard_nightly_cents": 12000,
+              "standard_stay_cents": 36000,
+              "non_refundable_nightly_cents": 10800,
+              "non_refundable_stay_cents": 32400,
+              "source_url": "https://usgarhoteles.com/es/rooms/familiar-superior/"
+            }
+          ],
+          "total": 2,
+          "truncated": false,
+          "availability_confirmed": false,
+          "price_basis": "site_reported_rate_for_dates; taxes_and_fees_not_independently_confirmed"
+        },
+        "evidence": {
+          "source_mode": "observed_first_party_http",
+          "scope": "usgar_public_read_only",
+          "evidence_level": "E4",
+          "source_urls": [
+            "https://usgarhoteles.com/api/rooms?checkIn=2026-11-04&checkOut=2026-11-07&lang=es",
+            "https://usgarhoteles.com/api/rooms/calendar?from=2026-11-04&to=2026-11-06"
+          ],
+          "observed_at": "2026-10-17T17:37:04.305Z",
+          "verification": "schema_dates_totals_and_calendar_crosscheck",
+          "transport": "http_only",
+          "cached": false,
+          "limits": [
+            "Inventory and rates are reported by USGAR, not independently checked against its PMS.",
+            "No booking hold or payment was created. Inventory may change."
+          ]
+        }
+      }
+    }
+  ],
+  "checks": [
+    "two_date_ranges_change_nights_and_totals",
+    "occupancy_filter",
+    "separate_calendar_crosscheck",
+    "no_browser_during_replay",
+    "mcp_handshake_tools_list_live_read_and_rejected_input",
+    "authenticated_rest_read_and_rejected_anonymous"
+  ],
+  "adapter_hash": "3224bec38ee1a2374a61a6f51d73ee41220394475a55d5544e76a7c694a81bc2",
+  "finished_at": "2026-10-17T17:37:05.191Z"
+}

@@ -1,0 +1,19 @@
+{
+  "status": "passed_with_limits",
+  "observed_at": "2026-10-17T18:45:03.353Z",
+  "surface": "standalone_web_ui",
+  "url": "http://127.0.0.1:4319/",
+  "checks": [
+    "catalog_loaded",
+    "phone_api_result_displayed",
+    "reviewed_capture_operations_displayed",
+    "learning_published_new_workflow",
+    "learned_workflow_called",
+    "workflow_remained_after_backend_restart",
+    "final_result_id_15_price_1100"
+  ],
+  "screenshot": "assets/validation/app-workflow.png",
+  "visual_reviewer": "agent",
+  "mobile_viewport_tested": false,
+  "external_login_tested": false
+}

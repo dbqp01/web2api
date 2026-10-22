@@ -1,0 +1,28 @@
+{
+  "status": "passed",
+  "validated_at": "2026-10-20T22:33:53.723Z",
+  "source_mode": "observed_first_party_protocol",
+  "scope": "whatsapp_personal_read_only",
+  "transport": "whatsapp_multidevice_websocket",
+  "checks": {
+    "connected": true,
+    "chats_listed": 50,
+    "chat_ids_unique": true,
+    "messages_fetched": 20,
+    "messages_ordered": true,
+    "chat_membership": true,
+    "search_hits": 1,
+    "search_scoped": true,
+    "search_known_text": true,
+    "input_rejected": true,
+    "status_counts": true
+  },
+  "counts": {
+    "chats_listed": 50,
+    "messages_fetched": 20,
+    "search_hits": 1,
+    "chat_count": 1000,
+    "message_count": 6480
+  },
+  "adapter_hash": "b39467e23a7b955471a3b8f42456c3ca06501b8aff9794cc03f0587caa272db5"
+}

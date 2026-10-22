@@ -1,0 +1,46 @@
+{
+  "name": "web2api",
+  "version": "0.3.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "scripts": {
+    "start": "node src/app.mjs",
+    "check": "node scripts/check.mjs",
+    "test": "node --test test/*.test.mjs",
+    "demo": "node scripts/demo.mjs",
+    "build": "node scripts/build.mjs",
+    "test:package": "node scripts/package-smoke.mjs",
+    "discover:usgar": "node scripts/discover-usgar.mjs",
+    "discover:multisite": "node scripts/collect-multisite.mjs",
+    "test:multisite": "node scripts/validate-multisite.mjs",
+    "lab": "node src/lab.mjs",
+    "serve": "node scripts/serve.mjs",
+    "mcp": "node src/mcp.mjs",
+    "mcp:uvcv": "node src/mcp-uvcv.mjs",
+    "mcp:whatsapp": "node src/mcp-whatsapp.mjs",
+    "whatsapp:login": "node scripts/whatsapp-login.mjs",
+    "whatsapp:logout": "node scripts/whatsapp-logout.mjs",
+    "whatsapp:validate": "node scripts/validate-whatsapp.mjs",
+    "uvcv:login": "node scripts/uvcv-login.mjs",
+    "uvcv:keepalive": "node scripts/uvcv-keepalive.mjs",
+    "uvcv:validate": "node scripts/validate-uvcv.mjs",
+    "learn": "node scripts/learn.mjs",
+    "test:learning": "node scripts/learning-smoke.mjs",
+    "test:app": "node scripts/app-smoke.mjs",
+    "test:discovery": "node --test test/browser-discovery.mjs",
+    "test:live": "node scripts/live.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.32.1",
+    "@whiskeysockets/baileys": "6.7.24",
+    "qrcode-terminal": "0.12.0",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "playwright": "1.64.1"
+  }
+}

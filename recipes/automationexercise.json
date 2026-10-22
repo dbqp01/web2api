@@ -1,0 +1,171 @@
+{
+  "version": 3,
+  "id": "search_automation_products",
+  "effect": "read",
+  "source_mode": "documented_api",
+  "input_fields": [
+    "query"
+  ],
+  "steps": [
+    {
+      "origin": "https://automationexercise.com",
+      "path": "/api/productsList",
+      "method": "GET",
+      "encoding": "query",
+      "allow_json_text": true,
+      "params": {},
+      "shape": {
+        "type": "object",
+        "fields": {
+          "responseCode": {
+            "type": "number"
+          },
+          "products": {
+            "type": "array",
+            "item": {
+              "type": "object",
+              "fields": {
+                "id": {
+                  "type": "number"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "price": {
+                  "type": "string"
+                },
+                "brand": {
+                  "type": "string"
+                },
+                "category": {
+                  "type": "object",
+                  "fields": {
+                    "usertype": {
+                      "type": "object",
+                      "fields": {
+                        "usertype": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "category": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "success": {
+        "responseCode": 200
+      }
+    },
+    {
+      "origin": "https://automationexercise.com",
+      "path": "/api/searchProduct",
+      "method": "POST",
+      "encoding": "form",
+      "allow_json_text": true,
+      "params": {
+        "search_product": {
+          "kind": "input",
+          "field": "query",
+          "cast": "string"
+        }
+      },
+      "shape": {
+        "type": "object",
+        "fields": {
+          "responseCode": {
+            "type": "number"
+          },
+          "products": {
+            "type": "array",
+            "item": {
+              "type": "object",
+              "fields": {
+                "id": {
+                  "type": "number"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "price": {
+                  "type": "string"
+                },
+                "brand": {
+                  "type": "string"
+                },
+                "category": {
+                  "type": "object",
+                  "fields": {
+                    "usertype": {
+                      "type": "object",
+                      "fields": {
+                        "usertype": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "category": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "success": {
+        "responseCode": 200
+      }
+    }
+  ],
+  "checks": [
+    {
+      "kind": "join",
+      "step": 0,
+      "collection": "products",
+      "terminal_collection": "products",
+      "identity": "id",
+      "fields": [
+        "id",
+        "name",
+        "price",
+        "brand",
+        "category.usertype.usertype",
+        "category.category"
+      ]
+    },
+    {
+      "kind": "contains_any",
+      "input": "query",
+      "fields": [
+        "name",
+        "category.category"
+      ],
+      "terminal_collection": "products"
+    },
+    {
+      "kind": "complete_search",
+      "step": 0,
+      "collection": "products",
+      "terminal_collection": "products",
+      "identity": "id",
+      "filters": [
+        {
+          "input": "query",
+          "fields": [
+            "name",
+            "category.category"
+          ]
+        }
+      ]
+    }
+  ],
+  "observed_at": "2026-10-17T18:23:19.856Z",
+  "discovery": "demonstration_guided_dependency_inference"
+}

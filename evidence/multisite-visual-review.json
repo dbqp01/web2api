@@ -1,0 +1,34 @@
+{
+  "status": "passed_with_limits",
+  "reviewed_at": "2026-10-17T17:40:44.030Z",
+  "reviewer": "Codex agent: saved screenshots explicitly inspected with view_image in this run",
+  "case_hash": "f4e8fdb6621117d03d02b101fcfa8ff4e71630efba8d48589861c2a5d2d9e70b",
+  "reviewed_product_cases": [
+    "Samsung galaxy s6: $360",
+    "Nokia lumia 1520: $820",
+    "Nexus 6: $650 (held out)",
+    "top: Blue Top, Rs. 500",
+    "dress: Sleeveless Dress, Rs. 1000; category explains extra matches",
+    "blue: Blue Top, Rs. 500; seven matching visible products",
+    "tshirt: Men Tshirt, Rs. 400 (held out)"
+  ],
+  "negative_control": "SauceDemo: demo login, catalog and Backpack detail visible; no first-party data API observed",
+  "limits": [
+    "Visual confirmation covers visible text, categories and prices. Product images failed to load in several Automation Exercise captures.",
+    "This is a dated agent review, not an automatic visual judge or a guarantee of checkout, purchasing or inventory."
+  ],
+  "screenshots": [
+    {
+      "file": "assets/validation/demoblaze-nexus.png",
+      "sha256": "48b1df1b7cfcd02867db6e0025d1614170186bc437c15346a1a7de07fe92375b"
+    },
+    {
+      "file": "assets/validation/automationexercise-tshirt.png",
+      "sha256": "6790aff1ba9954e37a2aa8e2067a1e073ea0bce305f511e26b9b7a093b2f0f22"
+    },
+    {
+      "file": "assets/validation/saucedemo-detail.png",
+      "sha256": "f85a317641b62cd1fea354fc95fe840d4b44b54e45086954b951e03644fb5261"
+    }
+  ]
+}

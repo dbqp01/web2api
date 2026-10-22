@@ -1,0 +1,1126 @@
+{
+  "status": "passed",
+  "observed_at": "2026-10-17T18:23:18.021Z",
+  "browser_closed_before_replay": true,
+  "autonomous_discovery": false,
+  "sites": {
+    "demoblaze": {
+      "status": "passed",
+      "recipe_hash": "8c846ed028a113371b04c650ba440c82464fa4cc5c647d8c562e6920b26ec618",
+      "workflow": "lookup_demoblaze_phone",
+      "training_demonstrations": 2,
+      "held_out_cases": 1,
+      "cases": [
+        {
+          "input": {
+            "product_name": "Samsung galaxy s6"
+          },
+          "role": "training_replay",
+          "status": "passed",
+          "duration_ms": 753.5477,
+          "visual": {
+            "page_url": "https://www.demoblaze.com/prod.html?idp_=1",
+            "name": "Samsung galaxy s6",
+            "price": 360,
+            "currency_label": "$",
+            "screenshots": [
+              "artifacts/multisite/demoblaze-1-category.png",
+              "artifacts/multisite/demoblaze-1-detail.png"
+            ]
+          },
+          "result": {
+            "data": {
+              "cat": "phone",
+              "desc": "The Samsung Galaxy S6 is powered by 1.5GHz octa-core Samsung Exynos 7420\n processor and it comes with 3GB of RAM. The phone packs 32GB of \ninternal storage cannot be expanded. ",
+              "id": 1,
+              "img": "imgs/galaxy_s6.jpg",
+              "price": 360,
+              "title": "Samsung galaxy s6"
+            },
+            "evidence": {
+              "source_mode": "observed_first_party_http",
+              "transport": "http_only",
+              "observed_at": "2026-10-17T18:23:18.784Z",
+              "workflow": "lookup_demoblaze_phone",
+              "steps_completed": 2,
+              "calls": [
+                {
+                  "method": "POST",
+                  "url": "https://api.demoblaze.com/bycat",
+                  "parameters": [
+                    "cat"
+                  ]
+                },
+                {
+                  "method": "POST",
+                  "url": "https://api.demoblaze.com/view",
+                  "parameters": [
+                    "id"
+                  ]
+                }
+              ],
+              "verification": [
+                {
+                  "kind": "join",
+                  "step": 0,
+                  "collection": "Items",
+                  "terminal_collection": null,
+                  "identity": "desc",
+                  "fields": [
+                    "cat",
+                    "desc",
+                    "id",
+                    "img",
+                    "price",
+                    "title"
+                  ]
+                },
+                {
+                  "kind": "contains_any",
+                  "input": "product_name",
+                  "fields": [
+                    "desc",
+                    "title"
+                  ],
+                  "terminal_collection": null
+                }
+              ],
+              "discovery": "demonstration_guided_dependency_inference",
+              "autonomous_discovery": false
+            }
+          }
+        },
+        {
+          "input": {
+            "product_name": "Nokia lumia 1520"
+          },
+          "role": "training_replay",
+          "status": "passed",
+          "duration_ms": 440.63149999999985,
+          "visual": {
+            "page_url": "https://www.demoblaze.com/prod.html?idp_=2",
+            "name": "Nokia lumia 1520",
+            "price": 820,
+            "currency_label": "$",
+            "screenshots": [
+              "artifacts/multisite/demoblaze-2-category.png",
+              "artifacts/multisite/demoblaze-2-detail.png"
+            ]
+          },
+          "result": {
+            "data": {
+              "cat": "phone",
+              "desc": "The Nokia Lumia 1520 is powered by 2.2GHz quad-core Qualcomm Snapdragon 800 processor and it comes with 2GB of RAM. ",
+              "id": 2,
+              "img": "imgs/Lumia_1520.jpg",
+              "price": 820,
+              "title": "Nokia lumia 1520"
+            },
+            "evidence": {
+              "source_mode": "observed_first_party_http",
+              "transport": "http_only",
+              "observed_at": "2026-10-17T18:23:19.219Z",
+              "workflow": "lookup_demoblaze_phone",
+              "steps_completed": 2,
+              "calls": [
+                {
+                  "method": "POST",
+                  "url": "https://api.demoblaze.com/bycat",
+                  "parameters": [
+                    "cat"
+                  ]
+                },
+                {
+                  "method": "POST",
+                  "url": "https://api.demoblaze.com/view",
+                  "parameters": [
+                    "id"
+                  ]
+                }
+              ],
+              "verification": [
+                {
+                  "kind": "join",
+                  "step": 0,
+                  "collection": "Items",
+                  "terminal_collection": null,
+                  "identity": "desc",
+                  "fields": [
+                    "cat",
+                    "desc",
+                    "id",
+                    "img",
+                    "price",
+                    "title"
+                  ]
+                },
+                {
+                  "kind": "contains_any",
+                  "input": "product_name",
+                  "fields": [
+                    "desc",
+                    "title"
+                  ],
+                  "terminal_collection": null
+                }
+              ],
+              "discovery": "demonstration_guided_dependency_inference",
+              "autonomous_discovery": false
+            }
+          }
+        },
+        {
+          "input": {
+            "product_name": "Nexus 6"
+          },
+          "role": "held_out_input",
+          "status": "passed",
+          "duration_ms": 421.0327,
+          "visual": {
+            "page_url": "https://www.demoblaze.com/prod.html?idp_=3",
+            "name": "Nexus 6",
+            "price": 650,
+            "currency_label": "$",
+            "screenshots": [
+              "artifacts/multisite/demoblaze-3-category.png",
+              "artifacts/multisite/demoblaze-3-detail.png"
+            ]
+          },
+          "result": {
+            "data": {
+              "cat": "phone",
+              "desc": "The Motorola Google Nexus 6 is powered by 2.7GHz quad-core Qualcomm Snapdragon 805 processor and it comes with 3GB of RAM.",
+              "id": 3,
+              "img": "imgs/Nexus_6.jpg",
+              "price": 650,
+              "title": "Nexus 6"
+            },
+            "evidence": {
+              "source_mode": "observed_first_party_http",
+              "transport": "http_only",
+              "observed_at": "2026-10-17T18:23:19.649Z",
+              "workflow": "lookup_demoblaze_phone",
+              "steps_completed": 2,
+              "calls": [
+                {
+                  "method": "POST",
+                  "url": "https://api.demoblaze.com/bycat",
+                  "parameters": [
+                    "cat"
+                  ]
+                },
+                {
+                  "method": "POST",
+                  "url": "https://api.demoblaze.com/view",
+                  "parameters": [
+                    "id"
+                  ]
+                }
+              ],
+              "verification": [
+                {
+                  "kind": "join",
+                  "step": 0,
+                  "collection": "Items",
+                  "terminal_collection": null,
+                  "identity": "desc",
+                  "fields": [
+                    "cat",
+                    "desc",
+                    "id",
+                    "img",
+                    "price",
+                    "title"
+                  ]
+                },
+                {
+                  "kind": "contains_any",
+                  "input": "product_name",
+                  "fields": [
+                    "desc",
+                    "title"
+                  ],
+                  "terminal_collection": null
+                }
+              ],
+              "discovery": "demonstration_guided_dependency_inference",
+              "autonomous_discovery": false
+            }
+          }
+        }
+      ],
+      "negative_cases": [
+        "absent_product"
+      ]
+    },
+    "automationexercise": {
+      "status": "passed",
+      "recipe_hash": "d3684372519e158c7907d45241bea6f37b9f953bcc1411409a55ce04b68751ee",
+      "workflow": "search_automation_products",
+      "training_demonstrations": 3,
+      "held_out_cases": 1,
+      "cases": [
+        {
+          "input": {
+            "query": "top"
+          },
+          "role": "training_replay",
+          "status": "passed",
+          "duration_ms": 1114.4688,
+          "visual": {
+            "page_url": "https://automationexercise.com/product_details/1",
+            "id": 1,
+            "name": "Blue Top",
+            "price_label": "Rs. 500",
+            "search_result_names": [
+              "Blue Top",
+              "Winter Top",
+              "Summer White Top",
+              "Madame Top For Women",
+              "Fancy Green Top",
+              "Sleeves Printed Top - White",
+              "Half Sleeves Top Schiffli Detailing - Pink",
+              "Frozen Tops For Kids",
+              "Full Sleeves Top Cherry - Pink",
+              "Printed Off Shoulder Top - White",
+              "Sleeves Top and Short - Blue & Pink",
+              "Little Girls Mr. Panda Shirt",
+              "Colour Blocked Shirt – Sky Blue",
+              "Lace Top For Women"
+            ],
+            "screenshots": [
+              "artifacts/multisite/automationexercise-1-search.png",
+              "artifacts/multisite/automationexercise-1-detail.png"
+            ]
+          },
+          "result": {
+            "data": {
+              "responseCode": 200,
+              "products": [
+                {
+                  "id": 1,
+                  "name": "Blue Top",
+                  "price": "Rs. 500",
+                  "brand": "Polo",
+                  "category": {
+                    "usertype": {
+                      "usertype": "Women"
+                    },
+                    "category": "Tops"
+                  }
+                },
+                {
+                  "id": 5,
+                  "name": "Winter Top",
+                  "price": "Rs. 600",
+                  "brand": "Mast & Harbour",
+                  "category": {
+                    "usertype": {
+                      "usertype": "Women"
+                    },
+                    "category": "Tops"
+                  }
+                },
+                {
+                  "id": 6,
+                  "name": "Summer White Top",
+                  "price": "Rs. 400",
+                  "brand": "H&M",
+                  "category": {
+                    "usertype": {
+                      "usertype": "Women"
+                    },
+                    "category": "Tops"
+                  }
+                },
+                {
+                  "id": 7,
+                  "name": "Madame Top For Women",
+                  "price": "Rs. 1000",
+                  "brand": "Madame",
+                  "category": {
+                    "usertype": {
+                      "usertype": "Women"
+                    },
+                    "category": "Tops"
+                  }
+                },
+                {
+                  "id": 8,
+                  "name": "Fancy Green Top",
+                  "price": "Rs. 700",
+                  "brand": "Polo",
+                  "category": {
+                    "usertype": {
+                      "usertype": "Women"
+                    },
+                    "category": "Tops"
+                  }
+                },
+                {
+                  "id": 11,
+                  "name": "Sleeves Printed Top - White",
+                  "price": "Rs. 499",
+                  "brand": "Babyhug",
+                  "category": {
+                    "usertype": {
+                      "usertype": "Kids"
+                    },
+                    "category": "Tops & Shirts"
+                  }
+                },
+                {
+                  "id": 12,
+                  "name": "Half Sleeves Top Schiffli Detailing - Pink",
+                  "price": "Rs. 359",
+                  "brand": "Babyhug",
+                  "category": {
+                    "usertype": {
+                      "usertype": "Kids"
+                    },
+                    "category": "Tops & Shirts"
+                  }
+                },
+                {
+                  "id": 13,
+                  "name": "Frozen Tops For Kids",
+                  "price": "Rs. 278",
+                  "brand": "Allen Solly Junior",
+                  "category": {
+                    "usertype": {
+                      "usertype": "Kids"
+                    },
+                    "category": "Tops & Shirts"
+                  }
+                },
+                {
+                  "id": 14,
+                  "name": "Full Sleeves Top Cherry - Pink",
+                  "price": "Rs. 679",
+                  "brand": "Kookie Kids",
+                  "category": {
+                    "usertype": {
+                      "usertype": "Kids"
+                    },
+                    "category": "Tops & Shirts"
+                  }
+                },
+                {
+                  "id": 15,
+                  "name": "Printed Off Shoulder Top - White",
+                  "price": "Rs. 315",
+                  "brand": "Babyhug",
+                  "category": {
+                    "usertype": {
+                      "usertype": "Kids"
+                    },
+                    "category": "Tops & Shirts"
+                  }
+                },
+                {
+                  "id": 16,
+                  "name": "Sleeves Top and Short - Blue & Pink",
+                  "price": "Rs. 478",
+                  "brand": "Babyhug",
+                  "category": {
+                    "usertype": {
+                      "usertype": "Kids"
+                    },
+                    "category": "Dress"
+                  }
+                },
+                {
+                  "id": 18,
+                  "name": "Little Girls Mr. Panda Shirt",
+                  "price": "Rs. 1200",
+                  "brand": "Kookie Kids",
+                  "category": {
+                    "usertype": {
+                      "usertype": "Kids"
+                    },
+                    "category": "Tops & Shirts"
+                  }
+                },
+                {
+                  "id": 24,
+                  "name": "Colour Blocked Shirt – Sky Blue",
+                  "price": "Rs. 849",
+                  "brand": "Allen Solly Junior",
+                  "category": {
+                    "usertype": {
+                      "usertype": "Kids"
+                    },
+                    "category": "Tops & Shirts"
+                  }
+                },
+                {
+                  "id": 42,
+                  "name": "Lace Top For Women",
+                  "price": "Rs. 1400",
+                  "brand": "Mast & Harbour",
+                  "category": {
+                    "usertype": {
+                      "usertype": "Women"
+                    },
+                    "category": "Tops"
+                  }
+                }
+              ]
+            },
+            "evidence": {
+              "source_mode": "documented_api",
+              "transport": "http_only",
+              "observed_at": "2026-10-17T18:23:20.969Z",
+              "workflow": "search_automation_products",
+              "steps_completed": 2,
+              "calls": [
+                {
+                  "method": "GET",
+                  "url": "https://automationexercise.com/api/productsList",
+                  "parameters": []
+                },
+                {
+                  "method": "POST",
+                  "url": "https://automationexercise.com/api/searchProduct",
+                  "parameters": [
+                    "search_product"
+                  ]
+                }
+              ],
+              "verification": [
+                {
+                  "kind": "join",
+                  "step": 0,
+                  "collection": "products",
+                  "terminal_collection": "products",
+                  "identity": "id",
+                  "fields": [
+                    "id",
+                    "name",
+                    "price",
+                    "brand",
+                    "category.usertype.usertype",
+                    "category.category"
+                  ]
+                },
+                {
+                  "kind": "contains_any",
+                  "input": "query",
+                  "fields": [
+                    "name",
+                    "category.category"
+                  ],
+                  "terminal_collection": "products"
+                },
+                {
+                  "kind": "complete_search",
+                  "step": 0,
+                  "collection": "products",
+                  "terminal_collection": "products",
+                  "identity": "id",
+                  "filters": [
+                    {
+                      "input": "query",
+                      "fields": [
+                        "name",
+                        "category.category"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "discovery": "demonstration_guided_dependency_inference",
+              "autonomous_discovery": false
+            }
+          }
+        },
+        {
+          "input": {
+            "query": "dress"
+          },
+          "role": "training_replay",
+          "status": "passed",
+          "duration_ms": 768.1884,
+          "visual": {
+            "page_url": "https://automationexercise.com/product_details/3",
+            "id": 3,
+            "name": "Sleeveless Dress",
+            "price_label": "Rs. 1000",
+            "search_result_names": [
+              "Sleeveless Dress",
+              "Stylish Dress",
+              "Sleeves Top and Short - Blue & Pink",
+              "Sleeveless Unicorn Patch Gown - Pink",
+              "Cotton Mull Embroidered Dress",
+              "Blue Cotton Indie Mickey Dress",
+              "Long Maxi Tulle Fancy Dress Up Outfits -Pink",
+              "Sleeveless Unicorn Print Fit & Flare Net Dress - Multi",
+              "Rose Pink Embroidered Maxi Dress"
+            ],
+            "screenshots": [
+              "artifacts/multisite/automationexercise-2-search.png",
+              "artifacts/multisite/automationexercise-2-detail.png"
+            ]
+          },
+          "result": {
+            "data": {
+              "responseCode": 200,
+              "products": [
+                {
+                  "id": 3,
+                  "name": "Sleeveless Dress",
+                  "price": "Rs. 1000",
+                  "brand": "Madame",
+                  "category": {
+                    "usertype": {
+                      "usertype": "Women"
+                    },
+                    "category": "Dress"
+                  }
+                },
+                {
+                  "id": 4,
+                  "name": "Stylish Dress",
+                  "price": "Rs. 1500",
+                  "brand": "Madame",
+                  "category": {
+                    "usertype": {
+                      "usertype": "Women"
+                    },
+                    "category": "Dress"
+                  }
+                },
+                {
+                  "id": 16,
+                  "name": "Sleeves Top and Short - Blue & Pink",
+                  "price": "Rs. 478",
+                  "brand": "Babyhug",
+                  "category": {
+                    "usertype": {
+                      "usertype": "Kids"
+                    },
+                    "category": "Dress"
+                  }
+                },
+                {
+                  "id": 19,
+                  "name": "Sleeveless Unicorn Patch Gown - Pink",
+                  "price": "Rs. 1050",
+                  "brand": "Allen Solly Junior",
+                  "category": {
+                    "usertype": {
+                      "usertype": "Kids"
+                    },
+                    "category": "Dress"
+                  }
+                },
+                {
+                  "id": 20,
+                  "name": "Cotton Mull Embroidered Dress",
+                  "price": "Rs. 1190",
+                  "brand": "Kookie Kids",
+                  "category": {
+                    "usertype": {
+                      "usertype": "Kids"
+                    },
+                    "category": "Dress"
+                  }
+                },
+                {
+                  "id": 21,
+                  "name": "Blue Cotton Indie Mickey Dress",
+                  "price": "Rs. 1530",
+                  "brand": "Biba",
+                  "category": {
+                    "usertype": {
+                      "usertype": "Kids"
+                    },
+                    "category": "Dress"
+                  }
+                },
+                {
+                  "id": 22,
+                  "name": "Long Maxi Tulle Fancy Dress Up Outfits -Pink",
+                  "price": "Rs. 1600",
+                  "brand": "Biba",
+                  "category": {
+                    "usertype": {
+                      "usertype": "Kids"
+                    },
+                    "category": "Dress"
+                  }
+                },
+                {
+                  "id": 23,
+                  "name": "Sleeveless Unicorn Print Fit & Flare Net Dress - Multi",
+                  "price": "Rs. 1100",
+                  "brand": "Biba",
+                  "category": {
+                    "usertype": {
+                      "usertype": "Kids"
+                    },
+                    "category": "Dress"
+                  }
+                },
+                {
+                  "id": 38,
+                  "name": "Rose Pink Embroidered Maxi Dress",
+                  "price": "Rs. 2300",
+                  "brand": "Madame",
+                  "category": {
+                    "usertype": {
+                      "usertype": "Women"
+                    },
+                    "category": "Dress"
+                  }
+                }
+              ]
+            },
+            "evidence": {
+              "source_mode": "documented_api",
+              "transport": "http_only",
+              "observed_at": "2026-10-17T18:23:21.738Z",
+              "workflow": "search_automation_products",
+              "steps_completed": 2,
+              "calls": [
+                {
+                  "method": "GET",
+                  "url": "https://automationexercise.com/api/productsList",
+                  "parameters": []
+                },
+                {
+                  "method": "POST",
+                  "url": "https://automationexercise.com/api/searchProduct",
+                  "parameters": [
+                    "search_product"
+                  ]
+                }
+              ],
+              "verification": [
+                {
+                  "kind": "join",
+                  "step": 0,
+                  "collection": "products",
+                  "terminal_collection": "products",
+                  "identity": "id",
+                  "fields": [
+                    "id",
+                    "name",
+                    "price",
+                    "brand",
+                    "category.usertype.usertype",
+                    "category.category"
+                  ]
+                },
+                {
+                  "kind": "contains_any",
+                  "input": "query",
+                  "fields": [
+                    "name",
+                    "category.category"
+                  ],
+                  "terminal_collection": "products"
+                },
+                {
+                  "kind": "complete_search",
+                  "step": 0,
+                  "collection": "products",
+                  "terminal_collection": "products",
+                  "identity": "id",
+                  "filters": [
+                    {
+                      "input": "query",
+                      "fields": [
+                        "name",
+                        "category.category"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "discovery": "demonstration_guided_dependency_inference",
+              "autonomous_discovery": false
+            }
+          }
+        },
+        {
+          "input": {
+            "query": "blue"
+          },
+          "role": "training_replay",
+          "status": "passed",
+          "duration_ms": 515.2673999999997,
+          "visual": {
+            "page_url": "https://automationexercise.com/product_details/1",
+            "id": 1,
+            "name": "Blue Top",
+            "price_label": "Rs. 500",
+            "search_result_names": [
+              "Blue Top",
+              "Sleeves Top and Short - Blue & Pink",
+              "Blue Cotton Indie Mickey Dress",
+              "Colour Blocked Shirt – Sky Blue",
+              "Grunt Blue Slim Fit Jeans",
+              "Beautiful Peacock Blue Cotton Linen Saree",
+              "GRAPHIC DESIGN MEN T SHIRT - BLUE"
+            ],
+            "screenshots": [
+              "artifacts/multisite/automationexercise-3-search.png",
+              "artifacts/multisite/automationexercise-3-detail.png"
+            ]
+          },
+          "result": {
+            "data": {
+              "responseCode": 200,
+              "products": [
+                {
+                  "id": 1,
+                  "name": "Blue Top",
+                  "price": "Rs. 500",
+                  "brand": "Polo",
+                  "category": {
+                    "usertype": {
+                      "usertype": "Women"
+                    },
+                    "category": "Tops"
+                  }
+                },
+                {
+                  "id": 16,
+                  "name": "Sleeves Top and Short - Blue & Pink",
+                  "price": "Rs. 478",
+                  "brand": "Babyhug",
+                  "category": {
+                    "usertype": {
+                      "usertype": "Kids"
+                    },
+                    "category": "Dress"
+                  }
+                },
+                {
+                  "id": 21,
+                  "name": "Blue Cotton Indie Mickey Dress",
+                  "price": "Rs. 1530",
+                  "brand": "Biba",
+                  "category": {
+                    "usertype": {
+                      "usertype": "Kids"
+                    },
+                    "category": "Dress"
+                  }
+                },
+                {
+                  "id": 24,
+                  "name": "Colour Blocked Shirt – Sky Blue",
+                  "price": "Rs. 849",
+                  "brand": "Allen Solly Junior",
+                  "category": {
+                    "usertype": {
+                      "usertype": "Kids"
+                    },
+                    "category": "Tops & Shirts"
+                  }
+                },
+                {
+                  "id": 37,
+                  "name": "Grunt Blue Slim Fit Jeans",
+                  "price": "Rs. 1400",
+                  "brand": "Polo",
+                  "category": {
+                    "usertype": {
+                      "usertype": "Men"
+                    },
+                    "category": "Jeans"
+                  }
+                },
+                {
+                  "id": 41,
+                  "name": "Beautiful Peacock Blue Cotton Linen Saree",
+                  "price": "Rs. 5000",
+                  "brand": "Madame",
+                  "category": {
+                    "usertype": {
+                      "usertype": "Women"
+                    },
+                    "category": "Saree"
+                  }
+                },
+                {
+                  "id": 43,
+                  "name": "GRAPHIC DESIGN MEN T SHIRT - BLUE",
+                  "price": "Rs. 1389",
+                  "brand": "Mast & Harbour",
+                  "category": {
+                    "usertype": {
+                      "usertype": "Men"
+                    },
+                    "category": "Tshirts"
+                  }
+                }
+              ]
+            },
+            "evidence": {
+              "source_mode": "documented_api",
+              "transport": "http_only",
+              "observed_at": "2026-10-17T18:23:22.253Z",
+              "workflow": "search_automation_products",
+              "steps_completed": 2,
+              "calls": [
+                {
+                  "method": "GET",
+                  "url": "https://automationexercise.com/api/productsList",
+                  "parameters": []
+                },
+                {
+                  "method": "POST",
+                  "url": "https://automationexercise.com/api/searchProduct",
+                  "parameters": [
+                    "search_product"
+                  ]
+                }
+              ],
+              "verification": [
+                {
+                  "kind": "join",
+                  "step": 0,
+                  "collection": "products",
+                  "terminal_collection": "products",
+                  "identity": "id",
+                  "fields": [
+                    "id",
+                    "name",
+                    "price",
+                    "brand",
+                    "category.usertype.usertype",
+                    "category.category"
+                  ]
+                },
+                {
+                  "kind": "contains_any",
+                  "input": "query",
+                  "fields": [
+                    "name",
+                    "category.category"
+                  ],
+                  "terminal_collection": "products"
+                },
+                {
+                  "kind": "complete_search",
+                  "step": 0,
+                  "collection": "products",
+                  "terminal_collection": "products",
+                  "identity": "id",
+                  "filters": [
+                    {
+                      "input": "query",
+                      "fields": [
+                        "name",
+                        "category.category"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "discovery": "demonstration_guided_dependency_inference",
+              "autonomous_discovery": false
+            }
+          }
+        },
+        {
+          "input": {
+            "query": "tshirt"
+          },
+          "role": "held_out_input",
+          "status": "passed",
+          "duration_ms": 497.3714,
+          "visual": {
+            "page_url": "https://automationexercise.com/product_details/2",
+            "id": 2,
+            "name": "Men Tshirt",
+            "price_label": "Rs. 400",
+            "search_result_names": [
+              "Men Tshirt",
+              "Pure Cotton V-Neck T-Shirt",
+              "Green Side Placket Detail T-Shirt",
+              "Premium Polo T-Shirts",
+              "Pure Cotton Neon Green Tshirt",
+              "GRAPHIC DESIGN MEN T SHIRT - BLUE"
+            ],
+            "screenshots": [
+              "artifacts/multisite/automationexercise-4-search.png",
+              "artifacts/multisite/automationexercise-4-detail.png"
+            ]
+          },
+          "result": {
+            "data": {
+              "responseCode": 200,
+              "products": [
+                {
+                  "id": 2,
+                  "name": "Men Tshirt",
+                  "price": "Rs. 400",
+                  "brand": "H&M",
+                  "category": {
+                    "usertype": {
+                      "usertype": "Men"
+                    },
+                    "category": "Tshirts"
+                  }
+                },
+                {
+                  "id": 28,
+                  "name": "Pure Cotton V-Neck T-Shirt",
+                  "price": "Rs. 1299",
+                  "brand": "H&M",
+                  "category": {
+                    "usertype": {
+                      "usertype": "Men"
+                    },
+                    "category": "Tshirts"
+                  }
+                },
+                {
+                  "id": 29,
+                  "name": "Green Side Placket Detail T-Shirt",
+                  "price": "Rs. 1000",
+                  "brand": "Polo",
+                  "category": {
+                    "usertype": {
+                      "usertype": "Men"
+                    },
+                    "category": "Tshirts"
+                  }
+                },
+                {
+                  "id": 30,
+                  "name": "Premium Polo T-Shirts",
+                  "price": "Rs. 1500",
+                  "brand": "Polo",
+                  "category": {
+                    "usertype": {
+                      "usertype": "Men"
+                    },
+                    "category": "Tshirts"
+                  }
+                },
+                {
+                  "id": 31,
+                  "name": "Pure Cotton Neon Green Tshirt",
+                  "price": "Rs. 850",
+                  "brand": "H&M",
+                  "category": {
+                    "usertype": {
+                      "usertype": "Men"
+                    },
+                    "category": "Tshirts"
+                  }
+                },
+                {
+                  "id": 43,
+                  "name": "GRAPHIC DESIGN MEN T SHIRT - BLUE",
+                  "price": "Rs. 1389",
+                  "brand": "Mast & Harbour",
+                  "category": {
+                    "usertype": {
+                      "usertype": "Men"
+                    },
+                    "category": "Tshirts"
+                  }
+                }
+              ]
+            },
+            "evidence": {
+              "source_mode": "documented_api",
+              "transport": "http_only",
+              "observed_at": "2026-10-17T18:23:22.751Z",
+              "workflow": "search_automation_products",
+              "steps_completed": 2,
+              "calls": [
+                {
+                  "method": "GET",
+                  "url": "https://automationexercise.com/api/productsList",
+                  "parameters": []
+                },
+                {
+                  "method": "POST",
+                  "url": "https://automationexercise.com/api/searchProduct",
+                  "parameters": [
+                    "search_product"
+                  ]
+                }
+              ],
+              "verification": [
+                {
+                  "kind": "join",
+                  "step": 0,
+                  "collection": "products",
+                  "terminal_collection": "products",
+                  "identity": "id",
+                  "fields": [
+                    "id",
+                    "name",
+                    "price",
+                    "brand",
+                    "category.usertype.usertype",
+                    "category.category"
+                  ]
+                },
+                {
+                  "kind": "contains_any",
+                  "input": "query",
+                  "fields": [
+                    "name",
+                    "category.category"
+                  ],
+                  "terminal_collection": "products"
+                },
+                {
+                  "kind": "complete_search",
+                  "step": 0,
+                  "collection": "products",
+                  "terminal_collection": "products",
+                  "identity": "id",
+                  "filters": [
+                    {
+                      "input": "query",
+                      "fields": [
+                        "name",
+                        "category.category"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "discovery": "demonstration_guided_dependency_inference",
+              "autonomous_discovery": false
+            }
+          }
+        }
+      ],
+      "negative_cases": [
+        "absent_product"
+      ]
+    }
+  },
+  "negative_controls": [
+    {
+      "site": "saucedemo",
+      "status": "unsupported_observed_path",
+      "steps": [
+        "demo_login",
+        "browse_catalog",
+        "open_product_detail"
+      ],
+      "product_name": "Sauce Labs Backpack",
+      "data_requests": [],
+      "screenshots": [
+        "artifacts/multisite/saucedemo-catalog.png",
+        "artifacts/multisite/saucedemo-detail.png"
+      ],
+      "reason": "No first-party fetch/XHR data request observed for the tested flow. This does not prove no API exists."
+    }
+  ],
+  "scope": "public_read_workflows_only",
+  "engine_hash": "7ab8a6706d6017c5053668c3a5050d5bbd0856f888e7c87436b6110e8bc9865e",
+  "policy_hash": "a39a2a06cd3dde5f11b0f3f29d699df64f0d8f619debef44f5ce1d0f8e73d7ab"
+}
