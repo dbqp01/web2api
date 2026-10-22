@@ -10,7 +10,7 @@ const directory = await mkdtemp(join(tmpdir(), 'web2api-app-smoke-'));
 const root = join(directory, 'app'), stateDirectory = join(directory, 'workflows');
 let child;
 async function start() {
-  const env = { ...process.env, WEB2API_PORT: '0', WEB2API_WORKFLOWS: stateDirectory, WEB2API_API_KEY: randomBytes(32).toString('hex') };
+  const env = { ...process.env, WEB2API_PORT: '0', WEB2API_WORKFLOWS: stateDirectory, WEB2API_UVCV_SESSION: join(directory, 'missing-test-session.json'), WEB2API_API_KEY: randomBytes(32).toString('hex') };
   delete env.WEB2API_RECIPE; delete env.WEB2API_UPSTREAM_TOKEN;
   child = spawn(process.execPath, [join(root, 'dist/app.mjs')], { cwd: root, env, stdio: ['ignore', 'pipe', 'pipe'] });
   return await new Promise((resolve, reject) => {

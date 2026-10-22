@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { inputs, descriptions, WorkflowError } from './contracts.mjs';
 import { errorResponse, json, readJson, validHost } from './http.mjs';
 import { createOpenApi } from './openapi.mjs';
+import { connectionStatus } from './connections.mjs';
 
 export function createApi({ run, apiKey, definitions = Object.fromEntries(Object.keys(inputs).map(id => [id, { input: inputs[id], effect: id === 'add_to_cart' ? 'write' : 'read', description: descriptions[id] }])), scope = 'controlled_lab_only', ui, learn, discovery }) {
   if (typeof apiKey !== 'string' || apiKey.length < 32) throw new WorkflowError('API_KEY_REQUIRED');
@@ -23,6 +24,7 @@ export function createApi({ run, apiKey, definitions = Object.fromEntries(Object
       const cookie = (req.headers.cookie || '').split(';').map(part => part.trim()).find(part => part.startsWith('web2api_session='))?.slice('web2api_session='.length);
       const authorized = equal(req.headers.authorization || '', `Bearer ${apiKey}`) || (session && cookie && equal(cookie, session));
       if (!authorized) throw new WorkflowError('UNAUTHORIZED', 401);
+      if (path === '/v1/connections' && req.method === 'GET') { json(res, 200, connectionStatus(definitions, scope)); return; }
       if (path === '/v1/discoveries' && req.method === 'POST' && discovery) {
         if (!req.headers['content-type']?.startsWith('application/json')) throw new WorkflowError('CONTENT_TYPE_REQUIRED', 415);
         json(res, 202, discovery.start(await readJson(req))); return;

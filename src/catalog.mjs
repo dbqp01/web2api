@@ -1,6 +1,8 @@
 import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
-import { resolve } from 'node:path';
+import { resolve, join } from 'node:path';
+import { homedir } from 'node:os';
+
 import { inputs, parse, recipeSchema, WorkflowError } from './contracts.mjs';
 import { createRunner } from './runner.mjs';
 import { createUsgarRunner, usgarDefinitions } from './usgar.mjs';
@@ -8,6 +10,7 @@ import { descriptions } from './contracts.mjs';
 import { loadExternalWorkflows, loadLearnedWorkflows } from './external-workflows.mjs';
 import { createUvcvRunner, uvcvDefinitions, uvcvSessionAvailable } from './uvcv.mjs';
 
+export const defaultWorkflowDirectory = join(process.env.LOCALAPPDATA || join(homedir(), '.local/share'), 'Web2API', 'workflows');
 export const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 
 export async function loadUvcvCatalog() {
@@ -28,7 +31,7 @@ export async function loadRuntime() {
   return createRunner({ recipe, origin: process.env.WEB2API_ORIGIN || 'http://127.0.0.1:4318', token: process.env.WEB2API_UPSTREAM_TOKEN });
 }
 
-export async function loadCatalog({ workflowsDirectory = process.env.WEB2API_WORKFLOWS } = {}) {
+export async function loadCatalog({ workflowsDirectory = process.env.WEB2API_WORKFLOWS || defaultWorkflowDirectory } = {}) {
   if (process.env.WEB2API_RECIPE) return {
     definitions: Object.fromEntries(Object.keys(inputs).map(name => [name, { input: inputs[name], description: descriptions[name], effect: name === 'add_to_cart' ? 'write' : 'read' }])),
     run: await loadRuntime(), scope: 'controlled_lab_only',

@@ -11,6 +11,8 @@
     "check": "node scripts/check.mjs",
     "test": "node --test test/*.test.mjs",
     "demo": "node scripts/demo.mjs",
+    "studio:demo": "node scripts/studio-demo.mjs",
+    "test:studio": "node scripts/studio-smoke.mjs",
     "build": "node scripts/build.mjs",
     "test:package": "node scripts/package-smoke.mjs",
     "discover:usgar": "node scripts/discover-usgar.mjs",

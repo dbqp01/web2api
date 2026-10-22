@@ -16,7 +16,7 @@ assert(!(await readdir(root)).includes('node_modules'));
 const config = JSON.parse(await readFile(`${root}/mcp.json`, 'utf8')).mcpServers.web2api;
 const args = config.args.map(a => a.replaceAll('${PLUGIN_ROOT}', root));
 await access(args[0]);
-const env = { ...process.env }; delete env.WEB2API_RECIPE; delete env.WEB2API_UPSTREAM_TOKEN; delete env.WEB2API_WORKFLOWS;
+const env = { ...process.env, WEB2API_WORKFLOWS: join(root, 'empty-test-workflows'), WEB2API_UVCV_SESSION: join(root, 'missing-test-session.json') }; delete env.WEB2API_RECIPE; delete env.WEB2API_UPSTREAM_TOKEN;
 const client = new Client({ name: 'web2api-package-smoke', version: '0.1.0' });
 try {
   await client.connect(new StdioClientTransport({ command: process.execPath, args, cwd: root, env }));

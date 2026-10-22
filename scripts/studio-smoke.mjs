@@ -1,0 +1,142 @@
+import assert from 'node:assert/strict';
+import { mkdir, mkdtemp, readFile, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { chromium } from 'playwright';
+import { startStudioDemo } from './studio-demo.mjs';
+import { createApp } from '../src/app.mjs';
+import { listen } from '../src/http.mjs';
+
+const output = 'artifacts/studio';
+await mkdir(output, { recursive: true });
+const demo = await startStudioDemo({ port: 0 });
+let browser, learningApp, learningDirectory;
+const checks = [], errors = [];
+try {
+  browser = await chromium.launch({ headless: true });
+  const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+  page.on('pageerror', error => errors.push(error.message));
+  page.on('console', message => { if (message.type() === 'error' && !message.text().includes('Failed to load resource')) errors.push(message.text()); });
+  await page.goto(demo.origin);
+  await page.locator('[data-workflow="search_products"]').waitFor();
+  await page.locator('input[name=query]').fill('');
+  await page.locator('#run-button').click();
+  await page.locator('#run-status[data-state=success]').waitFor();
+  assert.equal(await page.locator('#result-preview tbody tr').count(), 3);
+  assert.match(await page.locator('#result-preview').innerText(), /S\/\s?25[.,]00/);
+  checks.push('Empty query returns all three products; PEN cents formatted correctly');
+  await page.locator('#tab-evidence').click();
+  assert.match(await page.locator('#evidence').innerText(), /http_only/);
+  await page.locator('#tab-json').click();
+  assert.equal(JSON.parse(await page.locator('#result').innerText()).total, 3);
+  await page.locator('#tab-request').click();
+  assert.match(await page.locator('#request-code').innerText(), /WEB2API_API_KEY/);
+  const downloadEvent = page.waitForEvent('download');
+  await page.locator('#download-result').click();
+  const download = await downloadEvent;
+  const saved = join(output, 'demo-result.json'); await download.saveAs(saved);
+  const downloaded = JSON.parse(await readFile(saved, 'utf8'));
+  assert.equal(downloaded.data.total, 3); assert.equal(downloaded.evidence.scope, 'controlled_lab_only');
+  checks.push('JSON, evidence, cURL and downloadable response reflect the same execution');
+  await page.locator('input[name=query]').fill('inexistente'); await page.locator('#run-button').click();
+  await page.locator('#run-status[data-state=success]').waitFor();
+  assert.match(await page.locator('#result-preview').innerText(), /no devolvió registros/);
+  await page.locator('[data-workflow="add_to_cart"]').click();
+  await page.locator('input[name=sku]').fill('coffee'); await page.locator('input[name=quantity]').fill('2');
+  assert.equal(await page.locator('input[name=confirmed]').isChecked(), false);
+  assert.equal(await page.locator('#run-form').evaluate(form => form.checkValidity()), false);
+  await page.locator('input[name=confirmed]').check();
+  await page.locator('input[name=sku]').fill('coffee!');
+  assert.equal(await page.locator('#run-form').evaluate(form => form.checkValidity()), false);
+  assert.match(await page.locator('input[name=sku]').evaluate(input => input.validationMessage), /formato esperado/);
+  await page.locator('input[name=sku]').fill('coffee');
+  assert.equal(await page.locator('#run-form').evaluate(form => form.checkValidity()), true);
+  checks.push('JSON Schema patterns reject invalid input and recover without HTML regex errors');
+  await page.locator('#run-button').click();
+  await page.locator('#run-status[data-state=success]').waitFor();
+  assert.match(await page.locator('#result-preview').innerText(), /50[.,]00/);
+  await page.locator('[data-workflow="get_cart"]').click(); await page.locator('#run-button').click();
+  await page.locator('#run-status[data-state=success]').waitFor();
+  assert.equal(JSON.parse(await page.locator('#result').innerText()).subtotal_cents, 5000);
+  checks.push('Write requires fresh explicit confirmation; independent cart read retains verified subtotal');
+  await page.locator('[data-workflow="add_to_cart"]').click();
+  assert.equal(await page.locator('input[name=confirmed]').isChecked(), false);
+  await page.locator('input[name=sku]').fill('missing'); await page.locator('input[name=confirmed]').check();
+  await page.locator('#run-button').click(); await page.locator('#run-status[data-state=error]').waitFor();
+  assert.equal(await page.locator('#download-result').isDisabled(), true);
+  checks.push('Failed writes cannot download a previous successful response');
+  await page.locator('#workflow-search').fill('zzzz'); assert.equal(await page.locator('.workflow-card').count(), 0);
+  assert.match(await page.locator('#workflows').innerText(), /Sin coincidencias/);
+  await page.locator('#workflow-search').fill(''); await page.locator('#workflow-filter').selectOption('public');
+  assert.equal(await page.locator('.workflow-card').count(), 0); await page.locator('#workflow-filter').selectOption('all');
+  assert.equal(await page.locator('.workflow-card').count(), 3);
+  checks.push('Catalog search and source filters provide honest empty states');
+  await page.locator('a[data-nav=history]').click();
+  await page.locator('[data-view=history]').waitFor();
+  assert.equal(await page.locator('.history-row').count(), 5);
+  await page.locator('.history-row').nth(1).getByRole('button', { name: 'Abrir' }).click();
+  await page.waitForURL('**/#workspace'); assert.match(await page.locator('#run-status').innerText(), /No se ha ejecutado de nuevo/);
+  await page.locator('a[data-nav=connections]').click(); await page.locator('.connection-row').waitFor();
+  assert.match(await page.locator('#connections-list').innerText(), /Laboratorio local/);
+  assert.doesNotMatch(await page.locator('#connections-list').innerText(), /WhatsApp|UVCV/);
+  checks.push('History opens without replay; demo connections never expose personal sessions');
+  await page.locator('a[data-nav=learn]').click();
+  await page.locator('#capture-file').setInputFiles({ name: 'invalid.json', mimeType: 'application/json', buffer: Buffer.from('{no') });
+  await page.locator('#learn-status[data-state=error]').waitFor(); assert.equal(await page.locator('#learn-button').isDisabled(), true);
+  await page.locator('#load-example').click(); await page.waitForFunction(() => document.querySelector('#capture-review').textContent.includes('lookup_demoblaze_laptop'));
+  assert.equal(await page.locator('#learn-button').isDisabled(), true); await page.locator('#reviewed').check(); assert.equal(await page.locator('#learn-button').isEnabled(), true);
+  checks.push('Invalid JSON is rejected; imported operations require review');
+  await page.locator('a[data-nav=discover]').click(); await page.locator('#discover-url').fill('http://127.0.0.1:4320'); await page.locator('#discover-button').click();
+  await page.waitForFunction(() => document.querySelector('#discovery-progress').textContent.includes('ORIGIN_REJECTED'));
+  checks.push('Public discovery refuses local/insecure origins without launching a browser');
+  await page.locator('a[data-nav=workspace]').click(); await page.locator('[data-workflow=get_cart]').click(); await page.locator('#run-button').click();
+  await page.locator('#run-status[data-state=success]').waitFor();
+  for (const width of [1440, 768, 390]) {
+    await page.setViewportSize({ width, height: width === 390 ? 844 : 1000 });
+    await page.evaluate(() => document.fonts.ready);
+    assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `Horizontal page overflow at ${width}`);
+    await page.screenshot({ path: `${output}/studio-${width}.png`, fullPage: true });
+    if (width === 390) {
+      assert.equal(await page.locator('#sidebar').isVisible(), false);
+      await page.locator('#menu-toggle').click(); await page.locator('a[data-nav=guide]').click();
+      await page.locator('[data-view=guide]').waitFor();
+      assert.equal(await page.locator('#sidebar').isVisible(), false); assert.match(await page.locator('h1:visible').innerText(), /demo/);
+      await page.screenshot({ path: `${output}/guide-mobile.png`, fullPage: true });
+    }
+  }
+  checks.push('Desktop, tablet and mobile have no page overflow; mobile navigation opens and closes');
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  for (const view of ['discover', 'learn', 'history', 'connections', 'guide']) {
+    await page.goto(`${demo.origin}/#${view}`); await page.locator(`[data-view=${view}]`).waitFor();
+    if (view === 'connections') await page.locator('.connection-row').waitFor();
+    await page.screenshot({ path: `${output}/${view}.png`, fullPage: true });
+  }
+  await page.emulateMedia({ reducedMotion: 'reduce' }); await page.goto(demo.origin);
+  assert.equal(await page.locator('.workflow-card').count(), 3);
+  checks.push('Reduced-motion layout and each navigation destination render');
+  // Test publication through the real UI/compiler with a controlled upstream response.
+  const capture = JSON.parse(await readFile('examples/learn-laptop.json', 'utf8'));
+  const realFetch = globalThis.fetch;
+  const records = capture.training[0].calls[0].response;
+  const details = [...capture.training, ...capture.evaluation].map(trace => trace.calls.at(-1).response);
+  learningDirectory = await mkdtemp(join(tmpdir(), 'web2api-studio-learning-'));
+  globalThis.fetch = (url, init) => new URL(url).origin === 'https://api.demoblaze.com' ? Promise.resolve(Response.json(new URL(url).pathname === '/bycat' ? records : details.find(row => String(row.id) === JSON.parse(init.body).id))) : realFetch(url, init);
+  try {
+    learningApp = await listen(await createApp({ stateDirectory: learningDirectory, catalog: { definitions: {}, run() { throw Error('Unknown workflow'); } } }));
+    await page.goto(`${learningApp.origin}/#learn`); await page.locator('#load-example').click();
+    await page.waitForFunction(() => document.querySelector('#capture-review').textContent.includes('lookup_demoblaze_laptop'));
+    await page.locator('#reviewed').check(); await page.locator('#learn-button').click(); await page.locator('#learn-status[data-state=success]').waitFor();
+    await page.locator('#learn-open').click(); assert.equal(await page.locator('.workflow-card').count(), 1);
+    await page.locator('#run-button').click(); await page.locator('#run-status[data-state=success]').waitFor();
+    assert.equal(JSON.parse(await page.locator('#result').innerText()).id, 15);
+    const contract = await page.evaluate(async () => (await fetch('/v1/openapi.json')).json()); assert(contract.paths['/v1/workflows/lookup_demoblaze_laptop']);
+    checks.push('Import publishes through UI, updates catalog/OpenAPI and executes held-out input (controlled upstream)');
+  } finally { globalThis.fetch = realFetch; }
+  assert.deepEqual(errors, []);
+  console.log(JSON.stringify({ status: 'passed', checks, browser_errors: errors, screenshots: output }, null, 2));
+} finally {
+  if (browser) await browser.close();
+  if (learningApp) await learningApp.close();
+  if (learningDirectory) await rm(learningDirectory, { recursive: true, force: true });
+  await demo.close();
+}

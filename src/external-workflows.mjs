@@ -27,7 +27,10 @@ export async function loadExternalWorkflows() {
 export async function loadLearnedWorkflows(directory) {
   const definitions = {}, runners = {};
   if (directory) {
-    const files = (await readdir(directory, { withFileTypes: true })).filter(file => file.isFile() && file.name.endsWith('.workflow.json'));
+    let entries;
+    try { entries = await readdir(directory, { withFileTypes: true }); }
+    catch (error) { if (error.code !== 'ENOENT') throw error; entries = []; }
+    const files = entries.filter(file => file.isFile() && file.name.endsWith('.workflow.json'));
     if (files.length > 20) throw new WorkflowError('INVALID_WORKFLOW_DIRECTORY');
     const engineHash = await readEngineHash();
     for (const file of files) {

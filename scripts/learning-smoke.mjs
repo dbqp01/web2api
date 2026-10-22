@@ -14,7 +14,7 @@ const request = JSON.parse(await readFile(capture, 'utf8'));
 const client = new Client({ name: 'web2api-learned-smoke', version: '1.0.0' });
 try {
   await cp(resolve(process.argv[2] || 'artifacts/plugin/web2api'), root, { recursive: true });
-  const cleanEnv = { ...process.env }; delete cleanEnv.WEB2API_RECIPE; delete cleanEnv.WEB2API_UPSTREAM_TOKEN; delete cleanEnv.WEB2API_WORKFLOWS;
+  const cleanEnv = { ...process.env, WEB2API_UVCV_SESSION: join(directory, 'missing-test-session.json') }; delete cleanEnv.WEB2API_RECIPE; delete cleanEnv.WEB2API_UPSTREAM_TOKEN; delete cleanEnv.WEB2API_WORKFLOWS;
   // Run the packaged learner and MCP outside the repository, without npm or browser.
   await promisify(execFile)(process.execPath, [join(root, 'dist/learn.mjs'), capture, workflows], { cwd: root, env: cleanEnv });
   await client.connect(new StdioClientTransport({ command: process.execPath, args: [join(root, 'dist/mcp.mjs')], cwd: root, env: { ...cleanEnv, WEB2API_WORKFLOWS: workflows } }));

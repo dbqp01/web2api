@@ -2048,6 +2048,28 @@
         }
       }
     },
+    "/v1/connections": {
+      "get": {
+        "operationId": "connections",
+        "description": "Local connector configuration and capabilities, without opening sessions or reading personal data. Configuration is not a live health check.",
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "localBrowserSession": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Connection metadata and setup instructions"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
     "/v1/learn": {
       "post": {
         "operationId": "learn_workflow",

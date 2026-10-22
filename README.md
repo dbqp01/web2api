@@ -4,6 +4,41 @@ App local con backend Node, interfaz web, CLI de aprendizaje y API REST propia.
 Codex y MCP son consumidores opcionales. La ejecución de los workflows utiliza
 HTTP, sin visión, clics ni llamadas a un modelo.
 
+## Workflow Studio para la hackatón
+
+La app incluye navegación por vistas, búsqueda y filtros del catálogo, formularios
+tipados, resultados en tabla, JSON y evidencia, exportación de respuestas y llamadas
+cURL. El historial conserva las últimas 30 ejecuciones en memoria de la pestaña;
+no guarda respuestas personales en localStorage. Las fuentes IBM Plex están
+incluidas localmente y no requieren conexión a Google Fonts.
+
+Para presentar sin depender de Internet:
+
+```bash
+npm run studio:demo
+```
+
+Abre `http://127.0.0.1:4320`. Es un laboratorio claramente identificado: tres
+productos ficticios, precios PEN y un carrito temporal. El arranque observa la API
+local e infiere su receta; cada ejecución posterior realiza HTTP real. Una escritura
+requiere confirmación y se comprueba leyendo el carrito de nuevo. No hay pagos.
+Ctrl+C cierra ambos servidores y borra el estado temporal. No usa sesiones de UVCV
+o WhatsApp. La importación y el descubrimiento de webs externas sí necesitan Internet.
+
+En la app, **Guía de presentación** contiene el recorrido sugerido. El documento
+[HACKATHON.md](HACKATHON.md) incluye la preparación y los límites que conviene explicar.
+El paquete `artifacts/web2api-app` también incluye `npm run studio:demo` y puede
+llevarse a otro equipo con Node 24 sin instalar dependencias para la demo local.
+
+```bash
+npm run test:studio
+```
+
+Prueba la interfaz con Chromium: búsquedas, resultados vacíos, confirmación de
+escrituras, evidencia, descarga, historial, importación, filtros, navegación móvil y
+rechazo de destinos inseguros. Guarda capturas en `artifacts/studio/`. La importación
+de esta prueba usa respuestas upstream controladas; no acredita disponibilidad externa.
+
 ## Arrancar la app
 
 Desde el código fuente, con Node 24.x y las dependencias instaladas:
@@ -27,11 +62,18 @@ leer resultado/evidencia. También permite cargar una captura JSON revisada y
 probar un caso reservado antes de incorporar el workflow. El catálogo y
 `GET /v1/openapi.json` se actualizan inmediatamente. Los workflows aprendidos
 persisten en `%LOCALAPPDATA%/Web2API/workflows` en Windows, fuera del paquete;
-`WEB2API_WORKFLOWS` permite elegir otro directorio local.
+`WEB2API_WORKFLOWS` permite elegir otro directorio local. La app, REST y MCP
+comparten ese directorio predeterminado; reinicia un proceso MCP ya abierto para
+registrar workflows nuevos. El límite es 20 workflows aprendidos y se comprueba
+antes de importar para conservar un arranque válido.
 
-La demo incluida usa dos portátiles como demostraciones y reserva MacBook Pro.
-No descubre una web desde una URL de forma autónoma: las acciones, las capturas
-y los permisos siguen siendo aportados por el agente o una persona.
+El ejemplo de importación usa dos portátiles como demostraciones y reserva MacBook Pro.
+La vista Descubrir admite un patrón acotado desde una URL HTTPS: catálogo público
+JSON → ficha de producto por nombre exacto. Observa dos ejemplos, cierra el navegador
+y evalúa un caso reservado mediante HTTP antes de incorporar el workflow. No es un
+descubridor universal ni interpreta objetivos arbitrarios. Las operaciones desconocidas
+requieren revisión explícita. El ID del trabajo se conserva en la pestaña para retomar
+su seguimiento después de recargar mientras el backend siga abierto.
 Ver [plan de conexiones autenticadas](AUTHENTICATION.md) y
 [evidencia de la app independiente](evidence/app-validation.json).
 
